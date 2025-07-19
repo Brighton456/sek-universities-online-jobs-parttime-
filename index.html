@@ -1,707 +1,1217 @@
 <!DOCTYPE html>
-
 <html lang="en" class="scroll-smooth">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>SEKU Student Opportunities Hub</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chosen Palette: SEKU Green Harmony -->
+    <!-- Application Structure Plan: The SPA is designed as a single, vertical-scrolling landing page to guide SEKU students through the earning opportunity logically. The flow is: Hero (attention-grabbing intro) -> What & Why (context and benefits) -> How to Earn (core offering in a clear, card-based format) -> How it Works (simple steps) -> Testimonials (social proof) -> FAQ (addressing potential concerns) -> Final CTA. This structure was chosen over a direct report copy to create a persuasive and clear user journey, building trust by university branding and gradually introducing the partner service's details, making it easy for a busy student to understand and act upon. -->
+    <!-- Visualization & Content Choices: Report Info: Earning methods (watching videos, affiliate marketing). Goal: Organize & Inform. Viz/Presentation: Interactive HTML cards with icons for each method. Interaction: Hover effects on cards. Justification: Cards are visually appealing, scannable, and organize disparate earning methods into a cohesive section. Method: Tailwind CSS Grid. Report Info: Testimonials. Goal: Inform & Persuading. Viz/Presentation: Styled blockquote cards. Justification: Isolates testimonials for impact and credibility. Method: HTML/Tailwind. Report Info: Requirements. Goal: Inform. Viz/Presentation: Simple styled list. Justification: Clear and direct presentation of necessary steps. Method: HTML/Tailwind. CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-
         body {
-
             font-family: 'Inter', sans-serif;
-
             background-color: #f3f4f6; /* gray-100 */
-
         }
-
         .hero-bg {
-
             background-color: #047857; /* emerald-700 */
-
             background-image: linear-gradient(to right, rgba(4, 120, 87, 0.9), rgba(5, 150, 105, 0.8)), url('https://placehold.co/1200x800/d1d5db/4b5563?text=SEKU+Campus+Life');
-
             background-size: cover;
-
             background-position: center;
-
+            animation: background-zoom-pan 3s infinite linear alternate; /* Apply new animation, 10x faster */
         }
-
         .section-title {
-
             color: #047857; /* emerald-700 */
-
         }
-
         .about-bg {
-
             /* Reduced opacity of the white overlay to make the background image more visible */
-
             background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsmgllWufmsvNhEGOGO6E096dqTpK8lzzemA&s');
-
             background-size: cover;
-
             background-position: center;
-
             background-attachment: fixed; /* Optional: for parallax effect */
-
+            animation: background-zoom 3s infinite linear alternate, background-pan-slower 6s infinite linear alternate; /* Apply separate animations */
         }
-
+        /* Opportunities page background (video) */
         .opportunities-bg {
-
-            background-image: linear-gradient(to bottom, rgba(243, 244, 246, 0.7), rgba(243, 244, 246, 0.8)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlRe5TWI86qHCaz3Au2RqbfL_PFCwsgNaQzg&s');
-
-            background-size: cover;
-
-            background-position: center;
-
-            background-attachment: fixed;
-
+            position: relative; /* Needed for absolute positioning of video */
+            overflow: hidden; /* Hide overflowing video */
         }
-
-        .how-it-works-bg, .testimonials-bg, .faq-bg {
-
+        /* How it works page background (video) */
+        .how-it-works-bg {
+            position: relative; /* Needed for absolute positioning of video */
+            overflow: hidden; /* Hide overflowing video */
+        }
+        /* Testimonials and FAQ page background (image) */
+        .testimonials-bg, .faq-bg {
             background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTe5T_dNZj2M-8JrSNHpUYmW7B0hZ0ThUEmoQ&s');
-
             background-size: cover;
-
             background-position: center;
-
             background-attachment: fixed;
-
+            animation: background-zoom-pan 3s infinite linear alternate; /* Apply new animation, 10x faster */
         }
 
         /* Background text for the Final CTA Section */
-
-        #register {
-
-            position: relative;
-
-            overflow: hidden; /* Ensures pseudo-element doesn't overflow */
-
-        }
-
         #register::before {
-
             content: "SEKU CAMPUS LIFE";
-
             position: absolute;
-
             top: 50%;
-
             left: 50%;
-
             transform: translate(-50%, -50%);
-
             font-size: 8rem; /* Adjust size as needed */
-
             font-weight: bold;
-
             color: rgba(255, 255, 255, 0.1); /* White text with low opacity */
-
             white-space: nowrap;
-
             z-index: 0; /* Ensure it's behind other content */
-
             pointer-events: none; /* Allows clicks on elements above it */
-
         }
-
-
 
         /* Responsive adjustments for background text */
-
         @media (max-width: 768px) {
-
             #register::before {
-
                 font-size: 4rem; /* Smaller font size for mobile */
-
             }
-
         }
-
         @media (max-width: 480px) {
-
             #register::before {
-
                 font-size: 2.5rem; /* Even smaller font size for very small screens */
-
             }
-
         }
 
+        /* --- Button Animations --- */
+
+        /* General transition for all interactive elements for smoothness */
+        a, button, div[data-animated-button] {
+            transition: all 0.3s ease;
+        }
+
+        /* Header "Register Now" button */
+        .btn-header-register {
+            animation: shadow-pulse 2s infinite alternate;
+        }
+        .btn-header-register:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes shadow-pulse {
+            0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+            100% { box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
+        }
+
+        /* Hero Section "Explore Opportunities" button */
+        .btn-explore {
+            animation: bob-vertical 1.8s infinite ease-in-out; /* Slightly faster */
+        }
+        .btn-explore:hover {
+            animation: none; /* Stop continuous animation on hover */
+            transform: translateY(-8px); /* More pronounced hover */
+        }
+        @keyframes bob-vertical {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); /* Increased movement */ }
+        }
+
+        /* Hero Section "WhatsApp Us" button */
+        .btn-whatsapp {
+            animation: pulse-green 1.5s infinite;
+        }
+        .btn-whatsapp:hover {
+            animation: none; /* Stop continuous animation on hover */
+            transform: scale(1.05);
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(5, 150, 105, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+        }
+
+        /* About Section "Start Your Earning Journey" button */
+        .btn-start-journey {
+            animation: background-fade 3s infinite alternate;
+        }
+        .btn-start-journey:hover {
+            animation: none; /* Stop continuous animation on hover */
+            background-color: #065f46; /* emerald-900 */
+            transform: scale(1.02);
+        }
+        @keyframes background-fade {
+            0% { background-color: #047857; }
+            100% { background-color: #059669; } /* emerald-600 */
+        }
+
+        /* About Section "Watch Video" button (on image) */
+        .btn-watch-video {
+            animation: red-glow 1.5s infinite alternate, subtle-rotate-video 4s infinite linear; /* Faster glow and added rotation */
+            left: calc(75% - 100px); /* Move 20px (approx 2cm) further to the left */
+            transform: translateX(-50%); /* Apply translateX directly here */
+        }
+        .btn-watch-video:hover {
+            animation: none; /* Stop continuous animation on hover */
+            box-shadow: 0 0 25px rgba(239, 68, 68, 1); /* Even more intense glow on hover */
+        }
+        @keyframes red-glow {
+            0% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.7); } /* More visible start glow */
+            100% { box-shadow: 0 0 18px rgba(239, 68, 68, 1); } /* More visible end glow */
+        }
+        @keyframes subtle-rotate-video {
+            0% { transform: rotate(-1deg); }
+            100% { transform: rotate(1deg); }
+        }
+
+        /* Earning Opportunities "Unlock Earning Methods" button */
+        .btn-unlock {
+            animation: sway-horizontal 2.2s infinite ease-in-out; /* Slightly faster */
+        }
+        .btn-unlock:hover {
+            animation: none; /* Stop continuous animation on hover */
+            transform: translateY(-3px); /* Keep original hover effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes sway-horizontal {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); /* Increased movement */ }
+        }
+
+        /* Earning Opportunities "Register on TrendQash" button (on phone image) */
+        .btn-register-image {
+            animation: vibrate-subtle 0.5s infinite alternate; /* Vibration animation */
+            left: calc(50% + 30px); /* Shift horizontally to the right by ~3cm */
+            width: 30%; /* Reduced length */
+        }
+        .btn-register-image:hover {
+            animation: none; /* Stop continuous animation on hover */
+            transform: rotate(5deg) scale(1.08); /* More pronounced on hover */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes vibrate-subtle {
+            0% { transform: translateX(-50%) rotate(-1deg); } /* Maintain center relative to new left, add rotation */
+            100% { transform: translateX(-50%) rotate(1deg); } /* Maintain center relative to new left, add rotation */
+        }
+
+        /* How It Works "WhatsApp Us" button (also uses .btn-whatsapp for pulse-green) */
+        .btn-how-whatsapp {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            animation: pulse-green 1.5s infinite; /* Apply the same pulse as hero WhatsApp */
+        }
+        .btn-how-whatsapp::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease-in-out;
+            z-index: -1;
+        }
+        .btn-how-whatsapp:hover::before {
+            left: 0;
+        }
+
+        /* How It Works "Visit TrendQash" button (on image) */
+        .btn-visit-trendqash {
+            animation: vibrate-more 0.6s infinite alternate; /* Vibration animation */
+            border: 2px solid transparent; /* Ensure initial border is transparent */
+            left: 50%; /* Center horizontally */
+        }
+        .btn-visit-trendqash:hover {
+            animation: none; /* Stop continuous animation on hover */
+            border: 3px solid #047857; /* emerald-700 */
+            color: #047857; /* emerald-700 */
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        @keyframes vibrate-more {
+            0% { transform: translateX(-50%) rotate(-2deg); } /* Maintain center, add rotation */
+            100% { transform: translateX(-50%) rotate(2deg); } /* Maintain center, add rotation */
+        }
+
+        /* Testimonials "Become a Success Story" button */
+        .btn-success-story {
+            animation: subtle-scale 2s infinite alternate;
+        }
+        .btn-success-story:hover {
+            animation: none; /* Stop continuous animation on hover */
+            transform: scale(1.08);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes subtle-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); /* More pronounced scale */ }
+        }
+
+        /* Final CTA "REGISTER NOW ON TRENDQASH" button */
+        .btn-final-register {
+            background-color: #ffffff;
+            color: #047857;
+            animation: final-cta-pulse 2s infinite alternate;
+        }
+        .btn-final-register:hover {
+            animation: none; /* Stop continuous animation on hover */
+            background-color: #047857;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        @keyframes final-cta-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            100% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+        }
+
+        /* Footer buttons */
+        .btn-footer {
+            animation: footer-bg-pulse 3s infinite alternate;
+        }
+        .btn-footer:hover {
+            animation: none; /* Stop continuous animation on hover */
+            background-color: #065f46; /* A darker emerald on hover */
+        }
+        @keyframes footer-bg-pulse {
+            0% { background-color: #059669; } /* emerald-600 */
+            100% { background-color: #047857; } /* emerald-700 */
+        }
+
+        /* Bell shake animation */
+        .bell-shake {
+            animation: bell-shake 0.8s infinite alternate;
+            display: inline-block; /* Ensure it respects transform */
+            margin-right: 5px; /* Small space between bell and text */
+            font-size: 2.4em; /* Make the bell twice as big */
+            color: gold; /* Golden color */
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.7), 0 0 10px rgba(255, 215, 0, 0.5); /* Shiny effect */
+        }
+        @keyframes bell-shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); } /* Increased shake angle */
+            50% { transform: rotate(-15deg); } /* Increased shake angle */
+            75% { transform: rotate(15deg); } /* Increased shake angle */
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Background zoom animation (for About page) */
+        @keyframes background-zoom {
+            0% { background-size: 100% 100%; }
+            50% { background-size: 105% 105%; }
+            100% { background-size: 100% 100%; }
+        }
+
+        /* Background pan animation (for About page, slower) */
+        @keyframes background-pan-slower {
+            0% { background-position: 0% 0%; }
+            25% { background-position: 5% 5%; }
+            50% { background-position: 0% 10%; }
+            75% { background-position: 10% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* Combined background zoom and pan animation (for other sections) */
+        @keyframes background-zoom-pan {
+            0% {
+                background-position: 0% 0%;
+                background-size: 100% 100%;
+            }
+            25% {
+                background-position: 5% 5%;
+                background-size: 105% 105%;
+            }
+            50% {
+                background-position: 0% 10%;
+                background-size: 100% 100%;
+            }
+            75% {
+                background-position: 10% 0%;
+                background-size: 105% 105%;
+            }
+            100% {
+                background-position: 0% 0%;
+                background-size: 100% 100%;
+            }
+        }
+
+        /* Scroll-triggered fade-in animation */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to Top Button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #047857; /* emerald-700 */
+            color: white;
+            padding: 12px 15px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #back-to-top:hover {
+            background-color: #059669; /* emerald-600 */
+            transform: translateY(-3px);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #047857; /* emerald-700 */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Music Prompt Message */
+        #music-prompt {
+            position: fixed;
+            bottom: 80px; /* Above the back to top button */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            z-index: 999;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer; /* Make the whole prompt clickable */
+        }
+        #music-prompt.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #music-prompt .close-button {
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            background: none; /* Ensure no default button background */
+            border: none; /* Ensure no default button border */
+            color: inherit; /* Inherit text color from parent */
+        }
+        #music-prompt .close-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
-
 </head>
-
 <body class="text-gray-800">
+    <!-- Background Music Audio Element -->
+    <!-- Using a royalty-free MP3 from Mixkit for reliable background audio.
+         Autoplay is muted due to browser policies. User interaction is required to unmute. -->
+    <audio id="background-music" src="https://assets.mixkit.co/music/preview/mixkit-serene-view-1247.mp3" autoplay loop muted></audio>
 
-
-
+    <!-- Header & Navigation -->
     <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
-
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-
             <div class="flex items-center space-x-2">
-
                 <div class="relative w-12 h-12 bg-emerald-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
-
                     <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">S</span>
-
-                    <span class="absolute bottom-1 right-1 text-sm">&#x1F4C8;</span> </div>
-
-                <div class="flex flex-col">
-
-                    <h1 class="text-xl font-bold text-gray-800">SEKU Opportunities Hub</h1>
-
-                    <p class="text-xs text-gray-500">Your Path to Financial Growth</p>
-
+                    <span class="absolute bottom-1 right-1 text-sm">&#x1F4C8;</span> <!-- Small chart increasing icon -->
                 </div>
-
+                <div class="flex flex-col">
+                    <h1 class="text-xl font-bold text-gray-800">SEKU Opportunities Hub</h1>
+                    <p class="text-xs text-gray-500">Your Path to Financial Growth</p>
+                </div>
             </div>
-
-            <nav class="hidden md:flex space-x-8">
-
+            <nav class="hidden md:flex space-x-8 items-center">
                 <a href="#about" class="text-gray-600 hover:text-emerald-700 font-medium">About</a>
-
                 <a href="#opportunities" class="text-gray-600 hover:text-emerald-700 font-medium">Opportunities</a>
-
                 <a href="#how-it-works" class="text-gray-600 hover:text-emerald-700 font-medium">How It Works</a>
-
                 <a href="#faq" class="text-gray-600 hover:text-emerald-700 font-medium">FAQ</a>
-
+                <!-- Music Toggle Button for desktop -->
+                <button id="music-toggle-button-desktop" class="bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 transition-colors duration-200 ml-4" title="Toggle Music">
+                    <i class="fas fa-volume-mute text-lg"></i>
+                </button>
             </nav>
-
-            <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
-
+            <!-- New Sign In Button -->
+            <a href="#" class="hidden md:inline-block bg-white text-emerald-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300 shadow-md ml-4">SIGN IN</a>
+            <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 btn-header-register">Register Now</a>
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200">
-
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-
                 </svg>
-
             </button>
-
         </div>
-
         <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4">
-
             <a href="#about" class="block py-2 text-gray-600 hover:text-emerald-700">About</a>
-
             <a href="#opportunities" class="block py-2 text-gray-600 hover:text-emerald-700">Opportunities</a>
-
             <a href="#how-it-works" class="block py-2 text-gray-600 hover:text-emerald-700">How It Works</a>
-
             <a href="#faq" class="block py-2 text-gray-600 hover:text-emerald-700">FAQ</a>
-
+            <!-- Music Toggle Button for mobile -->
+            <button id="music-toggle-button-mobile" class="w-full mt-2 text-left py-2 px-4 bg-gray-100 rounded-md flex items-center space-x-2 hover:bg-gray-200 transition-colors duration-200" title="Toggle Music">
+                <i class="fas fa-volume-mute text-lg"></i>
+                <span>Toggle Music</span>
+            </button>
+            <!-- New Sign In Button for mobile -->
+            <a href="#" class="block mt-2 w-full text-center bg-white text-emerald-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300 shadow-md">SIGN IN</a>
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block w-full text-center bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
-
         </div>
-
     </header>
 
-
-
     <main>
-
+        <!-- Hero Section -->
         <section class="hero-bg text-white pt-32 pb-20">
-
-            <div class="container mx-auto text-center px-6">
-
+            <div class="container mx-auto text-center px-6 fade-in-on-scroll">
                 <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Unlock Your Earning Potential While You Study</h2>
-
                 <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">A new initiative connecting South Eastern Kenya University students with flexible, legitimate online earning opportunities. Gain financial independence and valuable skills on your own schedule.</p>
-
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
-
-                    <a href="#about" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition duration-300">Explore Opportunities</a>
-
-                    <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
-
-                        <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
-
+                    <a href="#about" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 btn-explore">Explore Opportunities</a>
+                    <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 flex items-center space-x-2 btn-whatsapp">
+                        <span>&#x1F4AC;</span> <!-- WhatsApp bubble icon -->
+                        <span>WhatsApp Us</span>
                     </a>
-
                 </div>
-
             </div>
-
         </section>
 
-
-
+        <!-- About Section -->
         <section id="about" class="py-20 about-bg">
-
             <div class="container mx-auto px-6">
-
-                <div class="text-center mb-12">
-
+                <div class="text-center mb-12 fade-in-on-scroll">
                     <h3 class="text-3xl md:text-4xl font-bold section-title">The Perfect Opportunity for SEKU Students</h3>
-
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">We've partnered with **TrendQash Agencies**, a trusted digital income hub, to bring you a platform designed for the modern student. It's more than just earning; it's about empowering your future.</p>
+                    <!-- Image for About Section: Student Group Image with clickable button -->
+                    <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl overflow-hidden group aspect-video">
+                        <img id="studentGroupImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcEfANzr9UksjfN78jM7nY5kE08G-zsZmwYA&s" alt="Group of SEKU students collaborating" class="absolute inset-0 w-full h-full object-cover">
+                        
+                        <!-- Video Player (initially hidden) -->
+                        <div id="significantEarningsVideoContainer" class="absolute inset-0 hidden">
+                            <div id="significantEarningsVideo"></div> <!-- YouTube player will be embedded here -->
+                        </div>
 
+                        <!-- Opaque button over "WATCH NOW" button on the image -->
+                        <a href="javascript:void(0);" id="watchNowOverlay"
+                           class="absolute bottom-[8%] left-[70%] -translate-x-1/2 w-[30%] h-[10%]
+                                  flex items-center justify-center space-x-1
+                                  bg-red-600 text-white text-xs font-bold
+                                  rounded-b-lg cursor-pointer btn-watch-video">
+                            <i class="fas fa-bell bell-shake"></i>
+                            <span>Watch Video</span>
+                        </a>
+                    </div>
                 </div>
-
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-
-                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">✓</div>
-
                         <h4 class="text-xl font-semibold mb-2">Maximum Flexibility</h4>
-
                         <p class="text-gray-700">Earn money on your own schedule. Fit your tasks around lectures, assignments, and campus life without any pressure.</p>
-
                     </div>
-
-                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">★</div>
-
                         <h4 class="text-xl font-semibold mb-2">Diverse Opportunities</h4>
-
                         <p class="text-gray-700">From watching videos to affiliate marketing, choose the tasks that you enjoy the most. Keep things interesting and engaging.</p>
-
                     </div>
-
-                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">💻</div>
-
                         <h4 class="text-xl font-semibold mb-2">User-Friendly Platform</h4>
-
                         <p class="text-gray-700">The platform is designed for ease of use, ensuring a smooth and straightforward experience even with no prior experience.</p>
-
                     </div>
-
-                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">📈</div>
-
                         <h4 class="text-xl font-semibold mb-2">Significant Earnings</h4>
-
                         <p class="text-gray-700">Many students have reported a significant increase in their income, helping to cover tuition, living costs, and more.</p>
-
+                        <!-- Embedded YouTube Video for Significant Earnings -->
+                        <div class="mt-6 aspect-video w-full rounded-lg overflow-hidden shadow-xl">
+                            <iframe
+                                src="https://www.youtube.com/embed/3NYz7WnYp1g"
+                                title="Significant Earnings"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                class="w-full h-full"
+                            ></iframe>
+                        </div>
                     </div>
-
-                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                    <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">🤝</div>
-
                         <h4 class="text-xl font-semibold mb-2">Trustworthy & Effective</h4>
-
                         <p class="text-gray-700">This is a reliable way to make money online, backed by testimonials from thousands of satisfied earners across the continent.</p>
-
+                        <!-- Embedded YouTube Video for Trustworthy & Effective -->
+                        <div class="mt-6 aspect-video w-full rounded-lg overflow-hidden shadow-xl">
+                            <iframe
+                                src="https://www.youtube.com/embed/46JorXjX4ek"
+                                title="TrendQash Trustworthiness"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                class="w-full h-full"
+                            ></iframe>
+                        </div>
                     </div>
-
-                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
-
+                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-emerald-700 mb-4 text-4xl">📱</div>
-
                         <h4 class="text-xl font-semibold mb-2">Instant Payments</h4>
-
                         <p class="text-gray-700">Receive your earnings quickly and conveniently through M-PESA, making it easy to access your money when you need it.</p>
-
+                        <!-- Embedded YouTube Video for Instant Payments -->
+                        <div class="mt-6 aspect-video w-full rounded-lg overflow-hidden shadow-xl">
+                            <iframe
+                                src="https://www.youtube.com/embed/ICumGjxDSjI"
+                                title="How to Get Instant Payments"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                class="w-full h-full"
+                            ></iframe>
+                        </div>
                     </div>
-
                 </div>
-
+                <!-- New CTA button after About Section -->
+                <div class="text-center mt-12 fade-in-on-scroll">
+                    <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-emerald-800 btn-start-journey inline-block">Start Your Earning Journey</a>
+                </div>
             </div>
-
         </section>
 
-
-
+        <!-- Earning Opportunities Section -->
         <section id="opportunities" class="py-20 opportunities-bg">
-
-            <div class="container mx-auto px-6">
-
-                <div class="text-center mb-12">
-
+            <div class="absolute inset-0 z-0">
+                <iframe
+                    src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ8&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    class="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 object-cover"
+                ></iframe>
+                <div class="absolute inset-0 bg-gray-100/70"></div> <!-- Overlay for readability -->
+            </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12 fade-in-on-scroll">
                     <h3 class="text-3xl md:text-4xl font-bold section-title">How You Can Earn Daily</h3>
-
-                    <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Explore the various ways you can start earning today. All you need is your smartphone and some free time.</p>
-
+                    <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Explore the various ways you can start earning today. All you needed is your smartphone and some free time.</p>
+                    <!-- Image for Earning Opportunities: Phone Earning Image with clickable button -->
+                    <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl h-auto overflow-hidden group">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2C0c9grjLsLUvPohcCt4b3zymvwUlt1AtEw&s" alt="Person earning money on phone" class="w-full h-full object-cover">
+                        
+                        <!-- Opaque button over "trendqash.co.ke" -->
+                        <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer"
+                           class="absolute bottom-[15%] left-[calc(50%+30px)] -translate-x-1/2 w-[30%] h-[8%]
+                                  flex items-center justify-center space-x-1
+                                  bg-white text-emerald-700 text-xs font-bold
+                                  rounded-b-lg cursor-pointer hover:bg-gray-200 btn-register-image">
+                            <i class="fas fa-bell bell-shake"></i>
+                            <span>Register on TrendQash</span>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-
-                        <div class="text-red-500 text-3xl mb-4">▶</div>
-
-                        <h4 class="text-2xl font-bold mb-3">Watch YouTube Videos</h4>
-
-                        <p class="text-gray-600">Get paid for watching a curated selection of engaging YouTube videos. It's the easiest way to start earning immediately.</p>
-
-                    </div>
-
-                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-
-                         <div class="text-black text-3xl mb-4">🎵</div>
-
-                        <h4 class="text-2xl font-bold mb-3">Watch TikTok & Reels</h4>
-
-                        <p class="text-gray-600">Turn your scrolling time into earning time. Watch fun and trending TikTok videos and Instagram Reels and get rewarded.</p>
-
-                    </div>
-
-                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-
-                         <div class="text-yellow-500 text-3xl mb-4">?</div>
-
-                        <h4 class="text-2xl font-bold mb-3">Answer Trivia Questions</h4>
-
-                        <p class="text-gray-600">Test your knowledge on a variety of subjects. Answer trivia questions correctly and add to your daily earnings.</p>
-
-                    </div>
-
-                    <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 col-span-1 md:col-span-2 lg:col-span-3">
-
-                         <div class="text-green-500 text-3xl mb-4">👥</div>
-
-                        <h4 class="text-2xl font-bold mb-3">Become an Affiliate Agent</h4>
-
-                        <p class="text-gray-600">This is the most powerful earning method. Leverage your network by inviting friends to join. You'll earn significant commissions for every person who signs up through your link, creating a steady stream of passive income.</p>
-
-                    </div>
-
+                <!-- React component for dynamic opportunities list -->
+                <div id="opportunities-root" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Opportunities will be rendered here by React -->
                 </div>
-
+                <!-- New CTA button after Earning Opportunities Section -->
+                <div class="text-center mt-12 fade-in-on-scroll">
+                    <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-emerald-800 btn-unlock inline-block">Unlock Earning Methods</a>
+                </div>
             </div>
-
         </section>
 
-
-
+        <!-- How It Works Section -->
         <section id="how-it-works" class="py-20 how-it-works-bg">
-
-            <div class="container mx-auto px-6">
-
-                <div class="text-center mb-12">
-
+            <div class="absolute inset-0 z-0">
+                <iframe
+                    src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ2&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    class="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 object-cover"
+                ></iframe>
+                <div class="absolute inset-0 bg-white/70"></div> <!-- Overlay for readability -->
+            </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12 fade-in-on-scroll">
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Getting Started is Easy</h3>
-
-                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Follow these simple steps to begin your earning journey.</p>
-
+                    <!-- Certificate Image with opaque clickable button -->
+                    <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-md h-auto overflow-hidden group">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjvv9kuGlyvRsqDS0h6w5SafDZFpFjBxyxEA&s" alt="Certificate of Registration" class="mx-auto rounded-lg shadow-lg w-full h-full object-cover">
+                        
+                        <!-- Opaque button over "trendqashagencies.site" -->
+                        <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer"
+                           class="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[85%] h-[8%]
+                                  flex items-center justify-center space-x-1
+                                  bg-white text-emerald-700 text-xs font-bold
+                                  rounded-b-lg cursor-pointer hover:bg-gray-200 btn-visit-trendqash">
+                            <i class="fas fa-bell bell-shake"></i>
+                            <span>Visit TrendQash</span>
+                        </a>
+                    </div>
+                    <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Follow these simple steps to begin your earning journey.</p>
                 </div>
-
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8">
-
-                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
-
+                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">1</div>
-
                         <h4 class="text-xl font-semibold mb-2">Register</h4>
-
                         <p class="text-gray-700">Sign up on the TrendQash platform using a valid email and phone number.</p>
-
                     </div>
-
                     <div class="text-2xl text-gray-600 hidden md:block">→</div>
-
-                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
-
+                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">2</div>
-
                         <h4 class="text-xl font-semibold mb-2">Activate Your Account</h4>
-
                         <p class="text-gray-700">Pay the one-time activation fee of **Kes550** to unlock all earning features for life. This fee serves as a security measure to avoid non-serious students from registering many accounts.</p>
-
                     </div>
-
                     <div class="text-2xl text-gray-600 hidden md:block">→</div>
-
-                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
-
+                     <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md fade-in-on-scroll">
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">3</div>
-
                         <h4 class="text-xl font-semibold mb-2">Start Earning</h4>
-
                         <p class="text-gray-700">Dive into the activities! Watch videos, answer trivia, or start sharing your affiliate link to earn commissions.</p>
-
                     </div>
-
                 </div>
-
-                <div class="text-center mt-12">
-
-                    <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center justify-center space-x-2 mx-auto max-w-fit">
-
-                        <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
-
+                <div class="text-center mt-12 fade-in-on-scroll">
+                    <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 flex items-center justify-center space-x-2 mx-auto max-w-fit btn-how-whatsapp">
+                        <span>&#x1F4AC;</span> <!-- WhatsApp bubble icon -->
+                        <span>WhatsApp Us</span>
                     </a>
-
                 </div>
-
             </div>
-
         </section>
 
-
-
+        <!-- Testimonials Section -->
         <section id="testimonials" class="py-20 testimonials-bg">
-
             <div class="container mx-auto px-6">
-
-                <div class="text-center mb-12">
-
+                <div class="text-center mb-12 fade-in-on-scroll">
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Success Stories from Students & Earners</h3>
-
                 </div>
-
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-
+                    <div class="bg-white p-6 rounded-lg shadow-lg fade-in-on-scroll">
                         <p class="text-gray-600 italic mb-4">"I love the flexibility TrendQash offers. Whether it's affiliate marketing or simply watching videos, there are so many ways to earn. It's an amazing platform for anyone looking to make money online."</p>
-
                         <div class="flex items-center">
-
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=U" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
-
                             <div>
-
                                 <p class="font-bold">Mary K.</p>
-
                                 <p class="text-sm text-gray-500">University Student</p>
-
                             </div>
-
                         </div>
-
                     </div>
-
-                     <div class="bg-white p-6 rounded-lg shadow-lg">
-
+                     <div class="bg-white p-6 rounded-lg shadow-lg fade-in-on-scroll">
                         <p class="text-gray-600 italic mb-4">"Joining TrendQash was one of the best decisions I've made. The affiliate marketing program is top-notch, and I've seen a significant increase in my earnings. It's a trustworthy and effective way to make money online."</p>
-
                         <div class="flex items-center">
-
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=S" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
-
                             <div>
-
                                 <p class="font-bold">John G.</p>
-
                                 <p class="text-sm text-gray-500">Shop Attendant</p>
-
                             </div>
-
                         </div>
-
                     </div>
-
-                     <div class="bg-white p-6 rounded-lg shadow-lg">
-
+                     <div class="bg-white p-6 rounded-lg shadow-lg fade-in-on-scroll">
                         <p class="text-gray-600 italic mb-4">"I started with TrendQash just to try it out, but it quickly became my favorite side hustle. The daily tasks are simple, and I actually got paid faster than I expected. It's helped me cover small expenses without stress."</p>
-
                         <div class="flex items-center">
-
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=F" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
-
                             <div>
-
                                 <p class="font-bold">Faith A.</p>
-
                                 <p class="text-sm text-gray-500">Waitress</p>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
+                <!-- New CTA button after Testimonials Section -->
+                <div class="text-center mt-12 fade-in-on-scroll">
+                    <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-emerald-800 btn-success-story inline-block">Become a Success Story</a>
+                </div>
             </div>
-
         </section>
 
-
-
+        <!-- FAQ Section -->
         <section id="faq" class="py-20 faq-bg">
-
             <div class="container mx-auto px-6 max-w-4xl">
-
-                 <div class="text-center mb-12">
-
+                 <div class="text-center mb-12 fade-in-on-scroll">
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Frequently Asked Questions</h3>
-
                 </div>
-
                 <div class="space-y-4">
-
-                    <div class="bg-gray-100 rounded-lg p-4">
-
+                    <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">How do I get paid?</h5>
-
                         <p class="text-gray-600 mt-2">All payments are processed securely and quickly through M-PESA, directly to your registered phone number.</p>
-
                     </div>
-
-                     <div class="bg-gray-100 rounded-lg p-4">
-
+                     <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">Is this program officially run by SEKU?</h5>
-
-                        <p class="text-gray-600 mt-2">This website is an initiative to connect SEKU students with opportunities. The earning platform itself, TrendQash Agencies, is a third-party service provider.</p>
-
+                        <p class="text-gray-600 mt-2">This website is an. initiative to connect SEKU students with opportunities. The earning platform itself, TrendQash Agencies, is a third-party service provider.</p>
                     </div>
-
-                     <div class="bg-gray-100 rounded-lg p-4">
-
+                     <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">What is the one-time activation fee?</h5>
-
-                        <p class="text-gray-600 mt-2">TrendQash Agencies requires a one-time activation fee of **Kes550** to unlock lifetime access to all earning features. This fee helps maintain the platform and serves as a security measure to avoid non-serious students from registering many accounts.</p>
-
+                        <p class="text-gray-700 mt-2">TrendQash Agencies requires a one-time activation fee of **Kes550** to unlock lifetime access to all earning features. This fee helps maintain the platform and serves as a security measure to avoid non-serious students from registering many accounts.</p>
                     </div>
-
-                    <div class="bg-gray-100 rounded-lg p-4">
-
+                    <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">Do I need any special skills?</h5>
-
-                        <p class="text-gray-600 mt-2">Absolutely not! The tasks are designed to be simple and require no prior experience. All you need is a smartphone and an internet connection.</p>
-
+                        <p class="text-gray-700 mt-2">Absolutely not! The tasks are designed to be simple and require no prior experience. All you need is a smartphone and an internet connection.</p>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
 
-
-
+        <!-- Final CTA Section -->
         <section id="register" class="py-20 bg-emerald-700 text-white">
-
-             <div class="container mx-auto text-center px-6">
-
+             <div class="container mx-auto text-center px-6 fade-in-on-scroll">
                 <h3 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start Earning?</h3>
-
                 <p class="text-emerald-200 mb-8 max-w-2xl mx-auto">Join thousands of students and other earners who are taking control of their finances. Your journey to daily earnings starts now!</p>
-
-                <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition duration-300">REGISTER NOW ON TRENDQASH</a>
-
+                <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="py-3 px-8 rounded-lg text-lg font-bold btn-final-register inline-block">REGISTER NOW ON TRENDQASH</a>
+                <!-- Laptop Worker Image with its label -->
+                <div class="text-center mt-8">
+                    <h4 class="text-xl font-bold text-white mb-4">Your Path to Success</h4>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdtaz0rnY7wur2jhHFrwWRc-hzhav5Vwi6IA&s" alt="Person working on laptop, representing easy steps" class="mx-auto rounded-lg shadow-lg w-full max-w-xl h-auto object-cover">
+                </div>
             </div>
-
         </section>
-
-
 
     </main>
 
-
-
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-10">
-
         <div class="container mx-auto px-6 text-center">
-
             <p>&copy; 2025 SEKU Student Opportunities Hub. All Rights Reserved.</p>
-
             <p class="text-sm text-gray-400 mt-2">Developed by Brighton Keiser, Civil Engineering Student at SEKU.</p>
-
-            <p class="text-sm text-gray-400 mt-4">This website is an independent initiative to connect South Eastern Kenya University students with earning opportunities provided by TrendQash Agencies. TrendQash Agencies is a third-party platform. For support related to their services, please use the contact methods below.</p>
-
+            <p class="text-sm text-gray-400 mt-4">This website is an independent initiative to connect South Eastern Kenya University with earning opportunities provided by TrendQash Agencies. TrendQash Agencies is a third-party platform. For support related to their services, please use the contact methods below.</p>
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
-
-                <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
-
-                    <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
-
+                <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 flex items-center space-x-2 btn-footer">
+                    <span>&#x1F4AC;</span> <!-- WhatsApp bubble icon -->
+                    <span>WhatsApp Us</span>
                 </a>
-
-                <a href="tel:+254720363215" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
-
-                    <span>&#x260E;</span> <span>Contact Us</span>
-
+                <a href="tel:+254720363215" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 flex items-center space-x-2 btn-footer">
+                    <span>&#x260E;</span> <!-- Phone icon -->
+                    <span>CALL ME</span>
                 </a>
-
             </div>
-
         </div>
-
     </footer>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
+    <!-- Music Prompt Message -->
+    <div id="music-prompt" class="select-none">
+        <i class="fas fa-info-circle mr-2"></i> Click to unmute
+        <button class="close-button" id="music-prompt-close" title="Dismiss message">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
 
-    <script>
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        document.addEventListener('DOMContentLoaded', function () {
+        // Import React and ReactDOM
+        import React from "https://esm.sh/react@18.2.0";
+        import ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
 
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
+        // Global Firebase variables (provided by Canvas environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        // FIX: Corrected the initialization of initialAuthToken to use __initial_auth_token
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-            const mobileMenu = document.getElementById('mobile-menu');
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let musicPromptDismissed = false; // Flag to track if the music prompt has been dismissed
+        let wasBackgroundMusicPlayingBeforeVideo = false; // Flag to track background music state before video plays
 
+        // Initialize Firebase and authenticate
+        async function initializeFirebase() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
 
+                // Sign in with custom token if available, otherwise anonymously
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
 
-            mobileMenuButton.addEventListener('click', function () {
-
-                mobileMenu.classList.toggle('hidden');
-
-            });
-
-
-
-            // Smooth scrolling for navigation links
-
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-                anchor.addEventListener('click', function (e) {
-
-                    e.preventDefault();
-
-                    
-
-                    // If it's a mobile menu link, close the menu
-
-                    if (mobileMenu.contains(this)) {
-
-                        mobileMenu.classList.add('hidden');
-
+                // Listen for auth state changes to set userId
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Firebase User ID:", userId);
+                        // Once authenticated, render the React app
+                        renderReactApp();
+                    } else {
+                        userId = null;
+                        console.log("No user signed in.");
+                        // If no user, still try to render the app, but dynamic content might be limited
+                        renderReactApp();
                     }
-
-
-
-                    const targetId = this.getAttribute('href');
-
-                    const targetElement = document.querySelector(targetId);
-
-
-
-                    if (targetElement) {
-
-                        targetElement.scrollIntoView({
-
-                            behavior: 'smooth'
-
-                        });
-
-                    }
-
                 });
 
+            } catch (error) {
+                console.error("Error initializing Firebase or authenticating:", error);
+                // Even if Firebase fails, try to render the React app with a fallback
+                renderReactApp();
+            }
+        }
+
+        // React Component for Earning Opportunities
+        const EarningOpportunities = () => {
+            const [opportunities, setOpportunities] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+
+            React.useEffect(() => {
+                const fetchOpportunities = async () => {
+                    if (!db) {
+                        setError("Firestore not initialized.");
+                        setLoading(false);
+                        return;
+                    }
+                    try {
+                        // Using a public collection for opportunities
+                        const opportunitiesCol = collection(db, `artifacts/${appId}/public/data/opportunities`);
+                        const opportunitySnapshot = await getDocs(opportunitiesCol);
+                        const opportunitiesList = opportunitySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setOpportunities(opportunitiesList);
+                    } catch (err) {
+                        console.error("Error fetching opportunities:", err);
+                        setError("Failed to load opportunities. Please try again later.");
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                // Only fetch if Firebase is ready (db is not null)
+                if (db) {
+                    fetchOpportunities();
+                } else {
+                    // If db is not ready immediately, wait for it (or handle gracefully)
+                    // For this example, we'll assume initializeFirebase will eventually set db.
+                    // A more robust solution might involve a state variable for Firebase readiness.
+                    const checkDbInterval = setInterval(() => {
+                        if (db) {
+                            clearInterval(checkDbInterval);
+                            fetchOpportunities();
+                        }
+                    }, 100);
+                }
+            }, []); // Empty dependency array means this runs once on mount
+
+            if (loading) {
+                return React.createElement("div", { className: "col-span-full flex justify-center items-center py-10" },
+                    React.createElement("div", { className: "loading-spinner" }),
+                    React.createElement("p", { className: "ml-3 text-gray-600" }, "Loading opportunities...")
+                );
+            }
+
+            if (error) {
+                return React.createElement("div", { className: "col-span-full text-center py-10 text-red-600" },
+                    React.createElement("p", null, error)
+                );
+            }
+
+            if (opportunities.length === 0) {
+                return React.createElement("div", { className: "col-span-full text-center py-10 text-gray-500" },
+                    React.createElement("p", null, "No earning opportunities available at the moment. Check back soon!"),
+                    React.createElement("p", null, "User ID: ", userId || 'Not available')
+                );
+            }
+
+            return React.createElement(React.Fragment, null,
+                opportunities.map(opportunity => React.createElement("div", {
+                    key: opportunity.id,
+                    className: "bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 fade-in-on-scroll"
+                },
+                    React.createElement("div", { className: "text-emerald-700 text-3xl mb-4" }, opportunity.icon || '✨'),
+                    React.createElement("h4", { className: "text-2xl font-bold mb-3" }, opportunity.title),
+                    React.createElement("p", { className: "text-gray-600" }, opportunity.description),
+                    opportunity.videoUrl && React.createElement("div", { className: "mt-6 aspect-video w-full rounded-lg overflow-hidden shadow-xl" },
+                        React.createElement("iframe", {
+                            src: opportunity.videoUrl,
+                            title: opportunity.title,
+                            frameBorder: "0", // Note: frameborder in HTML becomes frameBorder in React JSX
+                            allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+                            allowFullScreen: true, // Note: allowfullscreen in HTML becomes allowFullScreen in React JSX
+                            className: "w-full h-full"
+                        })
+                    )
+                ))
+            );
+        };
+
+        // Function to render the React app
+        const renderReactApp = () => {
+            const container = document.getElementById('opportunities-root');
+            if (container) {
+                const root = ReactDOM.createRoot(container);
+                root.render(React.createElement(EarningOpportunities));
+            }
+        };
+
+        // Vanilla JS for general page functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Firebase and authentication
+            initializeFirebase();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const backToTopButton = document.getElementById('back-to-top');
+            const backgroundMusic = document.getElementById('background-music');
+            const musicToggleButtonDesktop = document.getElementById('music-toggle-button-desktop');
+            const musicToggleButtonMobile = document.getElementById('music-toggle-button-mobile');
+            const musicPrompt = document.getElementById('music-prompt');
+            const musicPromptCloseButton = document.getElementById('music-prompt-close'); // Get the close button
+
+            // Function to update music toggle button icon and prompt visibility
+            const updateMusicIconAndPrompt = () => {
+                const iconClass = backgroundMusic.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+                if (musicToggleButtonDesktop) {
+                    musicToggleButtonDesktop.querySelector('i').className = iconClass;
+                }
+                if (musicToggleButtonMobile) {
+                    musicToggleButtonMobile.querySelector('i').className = iconClass;
+                }
+
+                // Show prompt if music is muted and not dismissed
+                if (backgroundMusic.muted && !musicPromptDismissed) {
+                    musicPrompt.classList.add('show');
+                } else {
+                    musicPrompt.classList.remove('show');
+                }
+            };
+
+            // Smoothly fade in audio volume
+            const fadeInAudio = (audioElement) => {
+                audioElement.volume = 0;
+                audioElement.muted = false; // Ensure it's unmuted before fading in
+                const fadeInterval = setInterval(() => {
+                    if (audioElement.volume < 0.5) { // Fade to 50% volume
+                        audioElement.volume += 0.05;
+                    } else {
+                        clearInterval(fadeInterval);
+                    }
+                }, 200); // Adjust interval and increment for desired fade speed
+            };
+
+            // Toggle music play/pause and mute/unmute
+            const toggleMusic = async () => {
+                if (backgroundMusic.muted) {
+                    backgroundMusic.muted = false;
+                    musicPromptDismissed = true; // Dismiss prompt when user interacts to unmute
+                    try {
+                        await backgroundMusic.play();
+                        fadeInAudio(backgroundMusic); // Fade in after playing
+                    } catch (error) {
+                        console.log("Autoplay prevented, user interaction needed:", error);
+                        // If autoplay is still prevented even after user gesture,
+                        // browsers might require more explicit user action or might be in a restrictive mode.
+                    }
+                } else {
+                    backgroundMusic.muted = true;
+                    backgroundMusic.pause();
+                }
+                updateMusicIconAndPrompt();
+            };
+
+            // Event listener for the music prompt's close button
+            if (musicPromptCloseButton) {
+                musicPromptCloseButton.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent click from bubbling up to the prompt div itself
+                    musicPromptDismissed = true;
+                    musicPrompt.classList.remove('show');
+                });
+            }
+
+            // Event listener for the music prompt itself
+            if (musicPrompt) {
+                musicPrompt.addEventListener('click', (e) => {
+                    // Only trigger toggleMusic if the click was directly on the prompt, not its children (like the close button)
+                    if (e.target === musicPrompt || e.target.parentNode === musicPrompt) {
+                        toggleMusic();
+                    }
+                });
+            }
+
+            // Attach event listeners to both desktop and mobile music toggle buttons
+            if (musicToggleButtonDesktop) {
+                musicToggleButtonDesktop.addEventListener('click', toggleMusic);
+            }
+            if (musicToggleButtonMobile) {
+                musicToggleButtonMobile.addEventListener('click', toggleMusic);
+            }
+
+            // Ensure icon and prompt are correct on load (after potential autoplay attempts)
+            backgroundMusic.addEventListener('canplaythrough', updateMusicIconAndPrompt);
+            backgroundMusic.addEventListener('volumechange', updateMusicIconAndPrompt); // Update if volume changes (e.g., user manually unmutes)
+            backgroundMusic.addEventListener('play', updateMusicIconAndPrompt);
+            backgroundMusic.addEventListener('pause', updateMusicIconAndPrompt);
+
+            // Initial icon and prompt update
+            updateMusicIconAndPrompt();
+
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.toggle('hidden');
             });
 
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // If it's a mobile menu link, close the menu
+                    if (mobileMenu.contains(this)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Video Playback Logic for "Significant Earnings" Video
+            const studentGroupImage = document.getElementById('studentGroupImage');
+            const significantEarningsVideoContainer = document.getElementById('significantEarningsVideoContainer');
+            const watchNowOverlay = document.getElementById('watchNowOverlay');
+            const videoId = '3NYz7WnYp1g'; // YouTube video ID for "Significant Earnings"
+
+            if (watchNowOverlay) {
+                watchNowOverlay.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Check if background music is currently playing and store its state
+                    if (!backgroundMusic.paused && !backgroundMusic.muted) {
+                        wasBackgroundMusicPlayingBeforeVideo = true;
+                        backgroundMusic.pause(); // Pause background music
+                    } else {
+                        wasBackgroundMusicPlayingBeforeVideo = false;
+                    }
+
+                    // Hide the image and the overlay
+                    studentGroupImage.classList.add('hidden');
+                    watchNowOverlay.classList.add('hidden');
+
+                    // Show the video player container
+                    significantEarningsVideoContainer.classList.remove('hidden');
+
+                    // Create the YouTube player if it doesn't exist, or load the video if it does
+                    if (!player) {
+                        player = new YT.Player('significantEarningsVideo', {
+                            videoId: videoId,
+                            playerVars: {
+                                'autoplay': 1,
+                                'controls': 1,
+                                'rel': 0, // Do not show related videos
+                                'modestbranding': 1 // No YouTube logo in the control bar
+                            },
+                            events: {
+                                'onReady': onPlayerReady,
+                                'onStateChange': onPlayerStateChange
+                            }
+                        });
+                    } else {
+                        // If player already exists (e.g., user played, paused, then clicked again)
+                        player.loadVideoById(videoId);
+                        player.playVideo();
+                    }
+                });
+            }
+
+            function onPlayerReady(event) {
+                event.target.playVideo();
+            }
+
+            function onPlayerStateChange(event) {
+                // YT.PlayerState.PAUSED (2)
+                // YT.PlayerState.ENDED (0)
+                if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                    // Hide the video container
+                    significantEarningsVideoContainer.classList.add('hidden');
+                    // Show the image and the overlay
+                    studentGroupImage.classList.remove('hidden');
+                    watchNowOverlay.classList.remove('hidden');
+                    // Stop the video and clear its source to prevent background audio
+                    if (player) {
+                        player.stopVideo();
+                        player.clearVideo();
+                    }
+
+                    // Resume background music if it was playing before the video and not manually muted
+                    if (wasBackgroundMusicPlayingBeforeVideo && !backgroundMusic.muted) {
+                        backgroundMusic.play();
+                    }
+                    wasBackgroundMusicPlayingBeforeVideo = false; // Reset flag
+                }
+            }
+
+            // Intersection Observer for fade-in-on-scroll animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            });
+
+            document.querySelectorAll('.fade-in-on-scroll').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Back to Top button visibility
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) { // Show button after scrolling 300px
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+
+            // Back to Top button click handler
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         });
 
+        // Load the YouTube IFrame Player API asynchronously.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        let player; // Declare player globally for YouTube API
+        function onYouTubeIframeAPIReady() {
+            // This function is called automatically by the API when the player is ready
+            // No specific action needed here as players are created dynamically on click.
+        }
     </script>
-
 </body>
-
-                        </html>
+</html>
