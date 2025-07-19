@@ -34,17 +34,18 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed; /* Optional: for parallax effect */
-            animation: background-zoom 3s infinite linear alternate, background-pan-slower 6s infinite linear alternate; /* Apply separate animations */
+            /* REMOVED ANIMATION: background-zoom 3s infinite linear alternate, background-pan-slower 6s infinite linear alternate; */
         }
         /* Opportunities page background (video) */
         .opportunities-bg {
             position: relative; /* Needed for absolute positioning of video */
             overflow: hidden; /* Hide overflowing video */
         }
-        /* How it works page background (video) */
+        /* How it works page background (image) */
         .how-it-works-bg {
             position: relative; /* Needed for absolute positioning of video */
             overflow: hidden; /* Hide overflowing video */
+            /* The video background will be applied directly via HTML structure */
         }
         /* Testimonials and FAQ page background (image) */
         .testimonials-bg, .faq-bg {
@@ -145,9 +146,9 @@
 
         /* About Section "Watch Video" button (on image) */
         .btn-watch-video {
-            animation: red-glow 1.5s infinite alternate, subtle-rotate-video 4s infinite linear; /* Faster glow and added rotation */
-            left: calc(75% - 100px); /* Move 20px (approx 2cm) further to the left */
-            transform: translateX(-50%); /* Apply translateX directly here */
+            animation: red-glow 1.5s infinite alternate, red-rotate-video 0.04s infinite linear; /* Faster glow and increased rotation speed by 10x */
+            left: calc(75% - 6.6px); /* Moved 1cm right (44.4px - 37.8px) */
+            height: 20%; /* Twice its height */
         }
         .btn-watch-video:hover {
             animation: none; /* Stop continuous animation on hover */
@@ -157,9 +158,9 @@
             0% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.7); } /* More visible start glow */
             100% { box-shadow: 0 0 18px rgba(239, 68, 68, 1); } /* More visible end glow */
         }
-        @keyframes subtle-rotate-video {
-            0% { transform: rotate(-1deg); }
-            100% { transform: rotate(1deg); }
+        @keyframes red-rotate-video {
+            0% { transform: translateX(-50%) rotate(-1deg); } /* Reduced rotation angle */
+            100% { transform: translateX(-50%) rotate(1deg); } /* Reduced rotation angle */
         }
 
         /* Earning Opportunities "Unlock Earning Methods" button */
@@ -421,13 +422,358 @@
         #music-prompt .close-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+
+        /* Fixed SIGN IN button */
+        #fixed-sign-in {
+            position: fixed;
+            top: 20px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            z-index: 1000; /* Ensure it's above other content */
+            background-color: #ffffff;
+            color: #047857;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        #fixed-sign-in:hover {
+            background-color: #f3f4f6; /* gray-100 */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Modal Specific Styles - Opportunity Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; /* Ensure it's on top of everything */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #047857, #059669, #10b981); /* Emerald gradient */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            padding: 24px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #ffffff; /* White text for contrast */
+            overflow: hidden; /* Hide overflow from pseudo-elements */
+        }
+
+        /* Complex professional design elements */
+        .modal-content::before,
+        .modal-content::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1); /* Subtle white overlay */
+            filter: blur(50px); /* Soft blur effect */
+            z-index: -1;
+        }
+
+        .modal-content::before {
+            width: 200px;
+            height: 200px;
+            top: -50px;
+            left: -50px;
+        }
+
+        .modal-content::after {
+            width: 150px;
+            height: 150px;
+            bottom: -30px;
+            right: -30px;
+            background: rgba(255, 255, 255, 0.05); /* Even subtler */
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #ffffff; /* White 'X' for contrast */
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .modal-close-btn:hover {
+            color: #d1d5db; /* Lighter white on hover */
+            transform: scale(1.2);
+        }
+        .modal-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            border: 4px solid #facc15; /* Gold border */
+        }
+        .modal-title {
+            font-size: 2.2rem; /* Larger title */
+            font-weight: bold;
+            color: #facc15; /* Gold color for title */
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Text shadow */
+        }
+        .modal-description {
+            font-size: 1.1rem; /* Slightly larger description */
+            color: #e5e7eb; /* Light gray for description */
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+        .modal-button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            border: none; /* Remove default button border */
+        }
+        .modal-button.explore {
+            background-color: #facc15; /* Gold for explore */
+            color: #374151; /* Dark text */
+        }
+        .modal-button.explore:hover {
+            background-color: #fbbf24; /* Lighter gold */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .modal-button.skip { /* New class for skip button */
+            background-color: rgba(255, 255, 255, 0.2); /* Transparent white */
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
+        }
+        .modal-button.skip:hover {
+            background-color: rgba(255, 255, 255, 0.3); /* More opaque white */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal Specific Styles - Register Modal (new) */
+        .register-modal-content {
+            background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8); /* Blue gradient */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            padding: 24px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #ffffff; /* White text for contrast */
+            overflow: hidden; /* Hide overflow from pseudo-elements */
+        }
+        .register-modal-content::before,
+        .register-modal-content::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1); /* Subtle white overlay */
+            filter: blur(50px); /* Soft blur effect */
+            z-index: -1;
+        }
+        .register-modal-content::before {
+            width: 220px;
+            height: 220px;
+            top: -70px;
+            right: -70px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .register-modal-content::after {
+            width: 180px;
+            height: 180px;
+            bottom: -50px;
+            left: -50px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .register-modal-image {
+            width: 180px; /* Slightly larger image */
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+            border: 5px solid #a78bfa; /* Purple border */
+        }
+        .register-modal-title {
+            font-size: 2.5rem; /* Even larger title */
+            font-weight: bold;
+            color: #bfdbfe; /* Light blue for title */
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .register-modal-description {
+            font-size: 1.2rem;
+            color: #e0f2fe; /* Lighter blue for description */
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .register-modal-button {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            border: none;
+        }
+        .register-modal-button.register-now {
+            background-color: #facc15; /* Gold for register */
+            color: #1f2937; /* Dark text */
+            font-size: 1.1rem;
+        }
+        .register-modal-button.register-now:hover {
+            background-color: #fbbf24;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .register-modal-button.skip-btn {
+            background-color: rgba(255, 255, 255, 0.15); /* More transparent white */
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .register-modal-button.skip-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal Specific Styles - Brighton Modal (new) */
+        .brighton-modal-content {
+            background: linear-gradient(135deg, #1f2937, #374151, #4b5563); /* Dark gray/blue gradient */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            padding: 24px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #ffffff; /* White text for contrast */
+            overflow: hidden; /* Hide overflow from pseudo-elements */
+        }
+        .brighton-modal-content::before,
+        .brighton-modal-content::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(75, 85, 99, 0.3); /* Darker subtle overlay */
+            filter: blur(60px); /* More blur */
+            z-index: -1;
+        }
+        .brighton-modal-content::before {
+            width: 250px;
+            height: 250px;
+            top: -80px;
+            left: -80px;
+            background: rgba(107, 114, 128, 0.2);
+        }
+        .brighton-modal-content::after {
+            width: 200px;
+            height: 200px;
+            bottom: -60px;
+            right: -60px;
+            background: rgba(55, 65, 81, 0.25);
+        }
+        .brighton-modal-image {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5); /* Even stronger shadow */
+            border: 5px solid #60a5fa; /* Blue border for tech theme */
+        }
+        .brighton-modal-title {
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: #60a5fa; /* Light blue for title */
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .brighton-modal-description {
+            font-size: 1.15rem;
+            color: #d1d5db; /* Light gray for description */
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .brighton-modal-button {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            border: none;
+        }
+        .brighton-modal-button.whatsapp-btn {
+            background-color: #25d366; /* WhatsApp green */
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+        .brighton-modal-button.whatsapp-btn:hover {
+            background-color: #128c7e;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .brighton-modal-button.skip-btn {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .brighton-modal-button.skip-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body class="text-gray-800">
     <!-- Background Music Audio Element -->
-    <!-- Using a royalty-free MP3 from Mixkit for reliable background audio.
+    <!-- Using a royalty-free MP3 from Free Music Public Domain for reliable background audio.
          Autoplay is muted due to browser policies. User interaction is required to unmute. -->
-    <audio id="background-music" src="https://assets.mixkit.co/music/preview/mixkit-serene-view-1247.mp3" autoplay loop muted></audio>
+    <audio id="background-music" src="https://www.dropbox.com/s/ayf4cwdytqafs70/The%20Calling%20%20-%20Angelwing.mp3?raw=1" autoplay loop muted></audio>
 
     <!-- Header & Navigation -->
     <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
@@ -452,8 +798,7 @@
                     <i class="fas fa-volume-mute text-lg"></i>
                 </button>
             </nav>
-            <!-- New Sign In Button -->
-            <a href="#" class="hidden md:inline-block bg-white text-emerald-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300 shadow-md ml-4">SIGN IN</a>
+            <!-- Removed SIGN IN from header navigation -->
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 btn-header-register">Register Now</a>
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -471,11 +816,13 @@
                 <i class="fas fa-volume-mute text-lg"></i>
                 <span>Toggle Music</span>
             </button>
-            <!-- New Sign In Button for mobile -->
-            <a href="#" class="block mt-2 w-full text-center bg-white text-emerald-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300 shadow-md">SIGN IN</a>
+            <!-- Removed SIGN IN from mobile menu -->
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block w-full text-center bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
         </div>
     </header>
+
+    <!-- Fixed SIGN IN button -->
+    <a href="#" id="fixed-sign-in" class="hidden md:inline-block">SIGN IN</a>
 
     <main>
         <!-- Hero Section -->
@@ -510,7 +857,7 @@
 
                         <!-- Opaque button over "WATCH NOW" button on the image -->
                         <a href="javascript:void(0);" id="watchNowOverlay"
-                           class="absolute bottom-[8%] left-[70%] -translate-x-1/2 w-[30%] h-[10%]
+                           class="absolute bottom-[8%] left-[calc(75%-6.6px)] -translate-x-1/2 w-[30%] h-[20%]
                                   flex items-center justify-center space-x-1
                                   bg-red-600 text-white text-xs font-bold
                                   rounded-b-lg cursor-pointer btn-watch-video">
@@ -609,7 +956,8 @@
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Explore the various ways you can start earning today. All you needed is your smartphone and some free time.</p>
                     <!-- Image for Earning Opportunities: Phone Earning Image with clickable button -->
                     <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl h-auto overflow-hidden group">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2C0c9grjLsLUvPohcCt4b3zymvwUlt1AtEw&s" alt="Person earning money on phone" class="w-full h-full object-cover">
+                        <!-- FIX: Replaced broken image URL with a reliable placeholder -->
+                        <img src="https://placehold.co/600x400/d1d5db/4b5563?text=Earn+Daily+on+Phone" alt="Person earning money on phone" class="w-full h-full object-cover">
                         
                         <!-- Opaque button over "trendqash.co.ke" -->
                         <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer"
@@ -635,9 +983,10 @@
 
         <!-- How It Works Section -->
         <section id="how-it-works" class="py-20 how-it-works-bg">
+            <!-- FIX: Applied the same video background as the opportunities section -->
             <div class="absolute inset-0 z-0">
                 <iframe
-                    src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ2&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
+                    src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ8&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
                     frameborder="0"
                     allow="autoplay; encrypted-media"
                     allowfullscreen
@@ -765,8 +1114,19 @@
         </section>
 
         <!-- Final CTA Section -->
-        <section id="register" class="py-20 bg-emerald-700 text-white">
-             <div class="container mx-auto text-center px-6 fade-in-on-scroll">
+        <section id="register" class="py-20 bg-emerald-700 text-white relative overflow-hidden">
+            <!-- FIX: Added video background to this section -->
+            <div class="absolute inset-0 z-0">
+                <iframe
+                    src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ8&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    class="absolute top-1/2 left-1/2 w-[180%] h-[180%] -translate-x-1/2 -translate-y-1/2 object-cover"
+                ></iframe>
+                <div class="absolute inset-0 bg-emerald-700/70"></div> <!-- Overlay for readability, maintaining emerald color -->
+            </div>
+             <div class="container mx-auto text-center px-6 relative z-10 fade-in-on-scroll">
                 <h3 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start Earning?</h3>
                 <p class="text-emerald-200 mb-8 max-w-2xl mx-auto">Join thousands of students and other earners who are taking control of their finances. Your journey to daily earnings starts now!</p>
                 <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="py-3 px-8 rounded-lg text-lg font-bold btn-final-register inline-block">REGISTER NOW ON TRENDQASH</a>
@@ -784,7 +1144,7 @@
     <footer class="bg-gray-900 text-white py-10">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2025 SEKU Student Opportunities Hub. All Rights Reserved.</p>
-            <p class="text-sm text-gray-400 mt-2">Developed by Brighton Keiser, Civil Engineering Student at SEKU.</p>
+            <p class="text-sm text-gray-400 mt-2">Developed by Brighton Wanjala, Civil Engineering Student at SEKU.</p>
             <p class="text-sm text-gray-400 mt-4">This website is an independent initiative to connect South Eastern Kenya University with earning opportunities provided by TrendQash Agencies. TrendQash Agencies is a third-party platform. For support related to their services, please use the contact methods below.</p>
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
                 <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 flex items-center space-x-2 btn-footer">
@@ -812,6 +1172,52 @@
         </button>
     </div>
 
+    <!-- Poster-like Prompt (Modal 1: Don't Miss Out) -->
+    <div id="poster-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <img src="https://placehold.co/150x150/facc15/374151?text=Opportunity" alt="Opportunity Icon" class="modal-image">
+            <h3 class="modal-title">Don't Miss Out!</h3>
+            <p class="modal-description">Unlock your financial freedom today. Seize this incredible opportunity to earn while you learn!</p>
+            <div class="modal-buttons">
+                <button id="modal-explore-btn" class="modal-button explore">Explore</button>
+                <button id="modal-skip-btn" class="modal-button skip">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Poster-like Prompt (Modal 2: Register to Start Earning) -->
+    <div id="register-modal-overlay" class="modal-overlay">
+        <div class="register-modal-content">
+            <button id="register-modal-close-btn" class="modal-close-btn">&times;</button>
+            <img src="https://placehold.co/180x180/a78bfa/FFFFFF?text=Start+Earning" alt="Happy black-beauty coloured official university lady using a laptop" class="register-modal-image">
+            <h3 class="register-modal-title">Ready to Earn?</h3>
+            <p class="register-modal-description">Don't wait! Register your account now and start your journey towards financial independence.</p>
+            <div class="modal-buttons">
+                <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" id="register-modal-register-btn" class="register-modal-button register-now flex items-center justify-center">
+                    <i class="fas fa-user-plus mr-2"></i> Register Now
+                </a>
+                <button id="register-modal-skip-btn" class="register-modal-button skip-btn">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Poster-like Prompt (Modal 3: Designed by Brighton Keiser) -->
+    <div id="brighton-modal-overlay" class="modal-overlay">
+        <div class="brighton-modal-content">
+            <button id="brighton-modal-close-btn" class="modal-close-btn">&times;</button>
+            <img src="https://placehold.co/160x160/60a5fa/FFFFFF?text=Web+Designer" alt="Professional web designer working on laptop" class="brighton-modal-image">
+            <h3 class="brighton-modal-title">Designed by Brighton Wanjala</h3>
+            <p class="brighton-modal-description">This website was crafted by Brighton Wanjala, a highly skilled Web Designer and Developer. Interested in a stunning website for yourself?</p>
+            <div class="modal-buttons">
+                <a href="https://api.whatsapp.com/send?phone=254720363215&text=hello+Mr+Brighton.+I+have+analysed+one+of+your+websites+and+have+been+fully+convinced+that+you+are+the+best.++I+would+kindly+request+your+team+to+desighn+one+for+me.++TELL+ME+MORE+ABOUT+YOUR+WORK+AND+PROJECT+DELIVERY" target="_blank" rel="noopener noreferrer" id="brighton-modal-whatsapp-btn" class="brighton-modal-button whatsapp-btn flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2"></i> WhatsApp Brighton
+                </a>
+                <button id="brighton-modal-skip-btn" class="brighton-modal-button skip-btn">Skip</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         // Import necessary Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -825,7 +1231,6 @@
         // Global Firebase variables (provided by Canvas environment)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        // FIX: Corrected the initialization of initialAuthToken to use __initial_auth_token
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app;
@@ -834,6 +1239,8 @@
         let userId = null;
         let musicPromptDismissed = false; // Flag to track if the music prompt has been dismissed
         let wasBackgroundMusicPlayingBeforeVideo = false; // Flag to track background music state before video plays
+        let isModalActive = false; // Flag to prevent multiple modals from showing simultaneously
+        let currentModalTimeout = null; // To store the timeout ID for the next modal
 
         // Initialize Firebase and authenticate
         async function initializeFirebase() {
@@ -979,6 +1386,25 @@
             const musicPrompt = document.getElementById('music-prompt');
             const musicPromptCloseButton = document.getElementById('music-prompt-close'); // Get the close button
 
+            // Modal 1 elements (Don't Miss Out)
+            const posterModalOverlay = document.getElementById('poster-modal-overlay');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalExploreBtn = document.getElementById('modal-explore-btn');
+            const modalSkipBtn = document.getElementById('modal-skip-btn');
+
+            // Modal 2 elements (Register to Start Earning)
+            const registerModalOverlay = document.getElementById('register-modal-overlay');
+            const registerModalCloseBtn = document.getElementById('register-modal-close-btn');
+            const registerModalRegisterBtn = document.getElementById('register-modal-register-btn'); // This is an <a> tag
+            const registerModalSkipBtn = document.getElementById('register-modal-skip-btn');
+
+            // Modal 3 elements (Designed by Brighton Keiser)
+            const brightonModalOverlay = document.getElementById('brighton-modal-overlay');
+            const brightonModalCloseBtn = document.getElementById('brighton-modal-close-btn');
+            const brightonModalWhatsappBtn = document.getElementById('brighton-modal-whatsapp-btn'); // This is an <a> tag
+            const brightonModalSkipBtn = document.getElementById('brighton-modal-skip-btn');
+
+
             // Function to update music toggle button icon and prompt visibility
             const updateMusicIconAndPrompt = () => {
                 const iconClass = backgroundMusic.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
@@ -1016,16 +1442,24 @@
                     backgroundMusic.muted = false;
                     musicPromptDismissed = true; // Dismiss prompt when user interacts to unmute
                     try {
+                        // Ensure the audio is loaded before attempting to play
+                        if (backgroundMusic.readyState < 2) { // HTMLMediaElement.HAVE_CURRENT_DATA
+                            backgroundMusic.load();
+                        }
                         await backgroundMusic.play();
                         fadeInAudio(backgroundMusic); // Fade in after playing
+                        console.log("Music unmuted and playing.");
                     } catch (error) {
-                        console.log("Autoplay prevented, user interaction needed:", error);
-                        // If autoplay is still prevented even after user gesture,
-                        // browsers might require more explicit user action or might be in a restrictive mode.
+                        console.error("Error attempting to play music:", error);
+                        // Re-mute if play failed to reflect actual state
+                        backgroundMusic.muted = true;
+                        backgroundMusic.pause();
+                        // Potentially show a message to the user that autoplay was blocked
                     }
                 } else {
                     backgroundMusic.muted = true;
                     backgroundMusic.pause();
+                    console.log("Music muted and paused.");
                 }
                 updateMusicIconAndPrompt();
             };
@@ -1198,6 +1632,84 @@
                     top: 0,
                     behavior: 'smooth'
                 });
+            });
+
+            // Function to show a modal
+            function showModal(modalElement) {
+                if (!isModalActive) {
+                    modalElement.classList.add('show');
+                    isModalActive = true;
+                }
+            }
+
+            // Function to hide a modal and schedule the next one
+            function hideModal(modalElement, nextModalFunction = null, nextModalDelay = 0) {
+                modalElement.classList.remove('show');
+                isModalActive = false; // Reset the flag when a modal is hidden
+
+                // Clear any existing timeout to prevent multiple calls
+                if (currentModalTimeout) {
+                    clearTimeout(currentModalTimeout);
+                    currentModalTimeout = null;
+                }
+
+                if (nextModalFunction) {
+                    currentModalTimeout = setTimeout(() => {
+                        nextModalFunction();
+                        currentModalTimeout = null; // Clear timeout ID after execution
+                    }, nextModalDelay);
+                }
+            }
+
+            // Define the sequence of modal appearances
+            const showFirstModal = () => showModal(posterModalOverlay);
+            const showSecondModal = () => showModal(registerModalOverlay);
+            const showThirdModal = () => showModal(brightonModalOverlay);
+            // The Z-cycle now restarts from the second modal
+            const restartZCycle = () => {
+                console.log("Restarting Z-cycle (from second modal)");
+                showSecondModal();
+            }; 
+
+            // Initial call for the first modal (one-time appearance)
+            setTimeout(showFirstModal, 3000);
+
+            // Event listeners for Modal 1 (Don't Miss Out)
+            modalCloseBtn.addEventListener('click', () => {
+                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+            });
+            modalExploreBtn.addEventListener('click', () => {
+                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+            });
+            modalSkipBtn.addEventListener('click', () => {
+                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+            });
+
+            // Event listeners for Modal 2 (Register to Start Earning)
+            registerModalCloseBtn.addEventListener('click', () => {
+                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
+            });
+            registerModalSkipBtn.addEventListener('click', () => {
+                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
+            });
+            // For the register button, it acts like a skip/close for the modal, but also navigates
+            registerModalRegisterBtn.addEventListener('click', () => {
+                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
+                // The actual navigation is handled by the <a> tag's href
+            });
+
+
+            // Event listeners for Modal 3 (Designed by Brighton Wanjala)
+            brightonModalCloseBtn.addEventListener('click', () => {
+                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
+            });
+            brightonModalSkipBtn.addEventListener('click', () => {
+                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
+            });
+            // For the WhatsApp button, it acts like a skip/close for the modal, but also navigates
+            brightonModalWhatsappBtn.addEventListener('click', () => {
+                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
+                // The actual navigation is handled by the <a> tag's href
             });
         });
 
