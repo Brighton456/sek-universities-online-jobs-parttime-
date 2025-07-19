@@ -1,354 +1,707 @@
 <!DOCTYPE html>
+
 <html lang="en" class="scroll-smooth">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SEKU Student Opportunities Hub</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+
         body {
+
             font-family: 'Inter', sans-serif;
+
             background-color: #f3f4f6; /* gray-100 */
+
         }
+
         .hero-bg {
+
             background-color: #047857; /* emerald-700 */
+
             background-image: linear-gradient(to right, rgba(4, 120, 87, 0.9), rgba(5, 150, 105, 0.8)), url('https://placehold.co/1200x800/d1d5db/4b5563?text=SEKU+Campus+Life');
+
             background-size: cover;
+
             background-position: center;
+
         }
+
         .section-title {
+
             color: #047857; /* emerald-700 */
+
         }
+
         .about-bg {
+
             /* Reduced opacity of the white overlay to make the background image more visible */
+
             background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsmgllWufmsvNhEGOGO6E096dqTpK8lzzemA&s');
+
             background-size: cover;
+
             background-position: center;
+
             background-attachment: fixed; /* Optional: for parallax effect */
+
         }
+
         .opportunities-bg {
+
             background-image: linear-gradient(to bottom, rgba(243, 244, 246, 0.7), rgba(243, 244, 246, 0.8)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlRe5TWI86qHCaz3Au2RqbfL_PFCwsgNaQzg&s');
+
             background-size: cover;
+
             background-position: center;
+
             background-attachment: fixed;
+
         }
+
         .how-it-works-bg, .testimonials-bg, .faq-bg {
+
             background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTe5T_dNZj2M-8JrSNHpUYmW7B0hZ0ThUEmoQ&s');
+
             background-size: cover;
+
             background-position: center;
+
             background-attachment: fixed;
+
         }
+
         /* Background text for the Final CTA Section */
+
         #register {
+
             position: relative;
+
             overflow: hidden; /* Ensures pseudo-element doesn't overflow */
+
         }
+
         #register::before {
+
             content: "SEKU CAMPUS LIFE";
+
             position: absolute;
+
             top: 50%;
+
             left: 50%;
+
             transform: translate(-50%, -50%);
+
             font-size: 8rem; /* Adjust size as needed */
+
             font-weight: bold;
+
             color: rgba(255, 255, 255, 0.1); /* White text with low opacity */
+
             white-space: nowrap;
+
             z-index: 0; /* Ensure it's behind other content */
+
             pointer-events: none; /* Allows clicks on elements above it */
+
         }
+
+
 
         /* Responsive adjustments for background text */
+
         @media (max-width: 768px) {
+
             #register::before {
+
                 font-size: 4rem; /* Smaller font size for mobile */
+
             }
+
         }
+
         @media (max-width: 480px) {
+
             #register::before {
+
                 font-size: 2.5rem; /* Even smaller font size for very small screens */
+
             }
+
         }
+
     </style>
+
 </head>
+
 <body class="text-gray-800">
 
+
+
     <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
+
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+
             <div class="flex items-center space-x-2">
+
                 <div class="relative w-12 h-12 bg-emerald-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
+
                     <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">S</span>
+
                     <span class="absolute bottom-1 right-1 text-sm">&#x1F4C8;</span> </div>
+
                 <div class="flex flex-col">
+
                     <h1 class="text-xl font-bold text-gray-800">SEKU Opportunities Hub</h1>
+
                     <p class="text-xs text-gray-500">Your Path to Financial Growth</p>
+
                 </div>
+
             </div>
+
             <nav class="hidden md:flex space-x-8">
+
                 <a href="#about" class="text-gray-600 hover:text-emerald-700 font-medium">About</a>
+
                 <a href="#opportunities" class="text-gray-600 hover:text-emerald-700 font-medium">Opportunities</a>
+
                 <a href="#how-it-works" class="text-gray-600 hover:text-emerald-700 font-medium">How It Works</a>
+
                 <a href="#faq" class="text-gray-600 hover:text-emerald-700 font-medium">FAQ</a>
+
             </nav>
+
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
+
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200">
+
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+
                 </svg>
+
             </button>
+
         </div>
+
         <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4">
+
             <a href="#about" class="block py-2 text-gray-600 hover:text-emerald-700">About</a>
+
             <a href="#opportunities" class="block py-2 text-gray-600 hover:text-emerald-700">Opportunities</a>
+
             <a href="#how-it-works" class="block py-2 text-gray-600 hover:text-emerald-700">How It Works</a>
+
             <a href="#faq" class="block py-2 text-gray-600 hover:text-emerald-700">FAQ</a>
+
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block w-full text-center bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
+
         </div>
+
     </header>
 
+
+
     <main>
+
         <section class="hero-bg text-white pt-32 pb-20">
+
             <div class="container mx-auto text-center px-6">
+
                 <h2 class="text-4xl md:text-6xl font-bold leading-tight mb-4">Unlock Your Earning Potential While You Study</h2>
+
                 <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">A new initiative connecting South Eastern Kenya University students with flexible, legitimate online earning opportunities. Gain financial independence and valuable skills on your own schedule.</p>
+
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+
                     <a href="#about" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition duration-300">Explore Opportunities</a>
+
                     <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
+
                         <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
+
                     </a>
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         <section id="about" class="py-20 about-bg">
+
             <div class="container mx-auto px-6">
+
                 <div class="text-center mb-12">
+
                     <h3 class="text-3xl md:text-4xl font-bold section-title">The Perfect Opportunity for SEKU Students</h3>
+
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">We've partnered with **TrendQash Agencies**, a trusted digital income hub, to bring you a platform designed for the modern student. It's more than just earning; it's about empowering your future.</p>
+
                 </div>
+
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+
                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">✓</div>
+
                         <h4 class="text-xl font-semibold mb-2">Maximum Flexibility</h4>
+
                         <p class="text-gray-700">Earn money on your own schedule. Fit your tasks around lectures, assignments, and campus life without any pressure.</p>
+
                     </div>
+
                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">★</div>
+
                         <h4 class="text-xl font-semibold mb-2">Diverse Opportunities</h4>
+
                         <p class="text-gray-700">From watching videos to affiliate marketing, choose the tasks that you enjoy the most. Keep things interesting and engaging.</p>
+
                     </div>
+
                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">💻</div>
+
                         <h4 class="text-xl font-semibold mb-2">User-Friendly Platform</h4>
+
                         <p class="text-gray-700">The platform is designed for ease of use, ensuring a smooth and straightforward experience even with no prior experience.</p>
+
                     </div>
+
                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">📈</div>
+
                         <h4 class="text-xl font-semibold mb-2">Significant Earnings</h4>
+
                         <p class="text-gray-700">Many students have reported a significant increase in their income, helping to cover tuition, living costs, and more.</p>
+
                     </div>
+
                     <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">🤝</div>
+
                         <h4 class="text-xl font-semibold mb-2">Trustworthy & Effective</h4>
+
                         <p class="text-gray-700">This is a reliable way to make money online, backed by testimonials from thousands of satisfied earners across the continent.</p>
+
                     </div>
+
                      <div class="p-6 bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-emerald-700 mb-4 text-4xl">📱</div>
+
                         <h4 class="text-xl font-semibold mb-2">Instant Payments</h4>
+
                         <p class="text-gray-700">Receive your earnings quickly and conveniently through M-PESA, making it easy to access your money when you need it.</p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         <section id="opportunities" class="py-20 opportunities-bg">
+
             <div class="container mx-auto px-6">
+
                 <div class="text-center mb-12">
+
                     <h3 class="text-3xl md:text-4xl font-bold section-title">How You Can Earn Daily</h3>
+
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Explore the various ways you can start earning today. All you need is your smartphone and some free time.</p>
+
                 </div>
+
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
                     <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
                         <div class="text-red-500 text-3xl mb-4">▶</div>
+
                         <h4 class="text-2xl font-bold mb-3">Watch YouTube Videos</h4>
+
                         <p class="text-gray-600">Get paid for watching a curated selection of engaging YouTube videos. It's the easiest way to start earning immediately.</p>
+
                     </div>
+
                     <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
                          <div class="text-black text-3xl mb-4">🎵</div>
+
                         <h4 class="text-2xl font-bold mb-3">Watch TikTok & Reels</h4>
+
                         <p class="text-gray-600">Turn your scrolling time into earning time. Watch fun and trending TikTok videos and Instagram Reels and get rewarded.</p>
+
                     </div>
+
                     <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
                          <div class="text-yellow-500 text-3xl mb-4">?</div>
+
                         <h4 class="text-2xl font-bold mb-3">Answer Trivia Questions</h4>
+
                         <p class="text-gray-600">Test your knowledge on a variety of subjects. Answer trivia questions correctly and add to your daily earnings.</p>
+
                     </div>
+
                     <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 col-span-1 md:col-span-2 lg:col-span-3">
+
                          <div class="text-green-500 text-3xl mb-4">👥</div>
+
                         <h4 class="text-2xl font-bold mb-3">Become an Affiliate Agent</h4>
+
                         <p class="text-gray-600">This is the most powerful earning method. Leverage your network by inviting friends to join. You'll earn significant commissions for every person who signs up through your link, creating a steady stream of passive income.</p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         <section id="how-it-works" class="py-20 how-it-works-bg">
+
             <div class="container mx-auto px-6">
+
                 <div class="text-center mb-12">
+
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Getting Started is Easy</h3>
+
                      <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Follow these simple steps to begin your earning journey.</p>
+
                 </div>
+
                 <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+
                      <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">1</div>
+
                         <h4 class="text-xl font-semibold mb-2">Register</h4>
+
                         <p class="text-gray-700">Sign up on the TrendQash platform using a valid email and phone number.</p>
+
                     </div>
+
                     <div class="text-2xl text-gray-600 hidden md:block">→</div>
+
                      <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">2</div>
+
                         <h4 class="text-xl font-semibold mb-2">Activate Your Account</h4>
+
                         <p class="text-gray-700">Pay the one-time activation fee of **Kes550** to unlock all earning features for life. This fee serves as a security measure to avoid non-serious students from registering many accounts.</p>
+
                     </div>
+
                     <div class="text-2xl text-gray-600 hidden md:block">→</div>
+
                      <div class="text-center p-6 max-w-sm bg-gray-100/90 rounded-lg shadow-md">
+
                         <div class="text-3xl font-bold text-emerald-700 bg-gray-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">3</div>
+
                         <h4 class="text-xl font-semibold mb-2">Start Earning</h4>
+
                         <p class="text-gray-700">Dive into the activities! Watch videos, answer trivia, or start sharing your affiliate link to earn commissions.</p>
+
                     </div>
+
                 </div>
+
                 <div class="text-center mt-12">
+
                     <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center justify-center space-x-2 mx-auto max-w-fit">
+
                         <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
+
                     </a>
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         <section id="testimonials" class="py-20 testimonials-bg">
+
             <div class="container mx-auto px-6">
+
                 <div class="text-center mb-12">
+
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Success Stories from Students & Earners</h3>
+
                 </div>
+
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
                     <div class="bg-white p-6 rounded-lg shadow-lg">
+
                         <p class="text-gray-600 italic mb-4">"I love the flexibility TrendQash offers. Whether it's affiliate marketing or simply watching videos, there are so many ways to earn. It's an amazing platform for anyone looking to make money online."</p>
+
                         <div class="flex items-center">
+
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=U" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
+
                             <div>
+
                                 <p class="font-bold">Mary K.</p>
+
                                 <p class="text-sm text-gray-500">University Student</p>
+
                             </div>
+
                         </div>
+
                     </div>
+
                      <div class="bg-white p-6 rounded-lg shadow-lg">
+
                         <p class="text-gray-600 italic mb-4">"Joining TrendQash was one of the best decisions I've made. The affiliate marketing program is top-notch, and I've seen a significant increase in my earnings. It's a trustworthy and effective way to make money online."</p>
+
                         <div class="flex items-center">
+
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=S" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
+
                             <div>
+
                                 <p class="font-bold">John G.</p>
+
                                 <p class="text-sm text-gray-500">Shop Attendant</p>
+
                             </div>
+
                         </div>
+
                     </div>
+
                      <div class="bg-white p-6 rounded-lg shadow-lg">
+
                         <p class="text-gray-600 italic mb-4">"I started with TrendQash just to try it out, but it quickly became my favorite side hustle. The daily tasks are simple, and I actually got paid faster than I expected. It's helped me cover small expenses without stress."</p>
+
                         <div class="flex items-center">
+
                             <img src="https://placehold.co/40x40/d1d5db/4b5563?text=F" class="w-10 h-10 rounded-full mr-4" alt="Testimonial author">
+
                             <div>
+
                                 <p class="font-bold">Faith A.</p>
+
                                 <p class="text-sm text-gray-500">Waitress</p>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
+
 
         <section id="faq" class="py-20 faq-bg">
+
             <div class="container mx-auto px-6 max-w-4xl">
+
                  <div class="text-center mb-12">
+
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Frequently Asked Questions</h3>
+
                 </div>
+
                 <div class="space-y-4">
+
                     <div class="bg-gray-100 rounded-lg p-4">
+
                         <h5 class="font-semibold text-lg">How do I get paid?</h5>
+
                         <p class="text-gray-600 mt-2">All payments are processed securely and quickly through M-PESA, directly to your registered phone number.</p>
+
                     </div>
+
                      <div class="bg-gray-100 rounded-lg p-4">
+
                         <h5 class="font-semibold text-lg">Is this program officially run by SEKU?</h5>
+
                         <p class="text-gray-600 mt-2">This website is an initiative to connect SEKU students with opportunities. The earning platform itself, TrendQash Agencies, is a third-party service provider.</p>
+
                     </div>
+
                      <div class="bg-gray-100 rounded-lg p-4">
+
                         <h5 class="font-semibold text-lg">What is the one-time activation fee?</h5>
+
                         <p class="text-gray-600 mt-2">TrendQash Agencies requires a one-time activation fee of **Kes550** to unlock lifetime access to all earning features. This fee helps maintain the platform and serves as a security measure to avoid non-serious students from registering many accounts.</p>
+
                     </div>
+
                     <div class="bg-gray-100 rounded-lg p-4">
+
                         <h5 class="font-semibold text-lg">Do I need any special skills?</h5>
+
                         <p class="text-gray-600 mt-2">Absolutely not! The tasks are designed to be simple and require no prior experience. All you need is a smartphone and an internet connection.</p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
+
+
         <section id="register" class="py-20 bg-emerald-700 text-white">
+
              <div class="container mx-auto text-center px-6">
+
                 <h3 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start Earning?</h3>
+
                 <p class="text-emerald-200 mb-8 max-w-2xl mx-auto">Join thousands of students and other earners who are taking control of their finances. Your journey to daily earnings starts now!</p>
+
                 <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-200 transition duration-300">REGISTER NOW ON TRENDQASH</a>
+
             </div>
+
         </section>
+
+
 
     </main>
 
+
+
     <footer class="bg-gray-900 text-white py-10">
+
         <div class="container mx-auto px-6 text-center">
+
             <p>&copy; 2025 SEKU Student Opportunities Hub. All Rights Reserved.</p>
+
             <p class="text-sm text-gray-400 mt-2">Developed by Brighton Keiser, Civil Engineering Student at SEKU.</p>
+
             <p class="text-sm text-gray-400 mt-4">This website is an independent initiative to connect South Eastern Kenya University students with earning opportunities provided by TrendQash Agencies. TrendQash Agencies is a third-party platform. For support related to their services, please use the contact methods below.</p>
+
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
+
                 <a href="https://api.whatsapp.com/send?phone=254720363215&text=Hello!+I%27m++*interested*++in+your++*part+time+earning+job*" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
+
                     <span>&#x1F4AC;</span> <span>WhatsApp Us</span>
+
                 </a>
+
                 <a href="tel:+254720363215" class="bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-700 transition duration-300 flex items-center space-x-2">
-                    <span>&#x260E;</span> <span>CALL ME</span>
+
+                    <span>&#x260E;</span> <span>Contact Us</span>
+
                 </a>
+
             </div>
+
         </div>
+
     </footer>
 
+
+
     <script>
+
         document.addEventListener('DOMContentLoaded', function () {
+
             const mobileMenuButton = document.getElementById('mobile-menu-button');
+
             const mobileMenu = document.getElementById('mobile-menu');
 
+
+
             mobileMenuButton.addEventListener('click', function () {
+
                 mobileMenu.classList.toggle('hidden');
+
             });
+
+
 
             // Smooth scrolling for navigation links
+
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+
                 anchor.addEventListener('click', function (e) {
+
                     e.preventDefault();
+
                     
+
                     // If it's a mobile menu link, close the menu
+
                     if (mobileMenu.contains(this)) {
+
                         mobileMenu.classList.add('hidden');
+
                     }
+
+
 
                     const targetId = this.getAttribute('href');
+
                     const targetElement = document.querySelector(targetId);
 
+
+
                     if (targetElement) {
+
                         targetElement.scrollIntoView({
+
                             behavior: 'smooth'
+
                         });
+
                     }
+
                 });
+
             });
+
         });
+
     </script>
+
 </body>
-</html>
+
+                        </html>
