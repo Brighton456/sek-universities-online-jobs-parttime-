@@ -1202,7 +1202,7 @@
         </div>
     </div>
 
-    <!-- Poster-like Prompt (Modal 3: Designed by Brighton Keiser) -->
+    <!-- Poster-like Prompt (Modal 3: Designed by Brighton Wanjala) -->
     <div id="brighton-modal-overlay" class="modal-overlay">
         <div class="brighton-modal-content">
             <button id="brighton-modal-close-btn" class="modal-close-btn">&times;</button>
@@ -1398,7 +1398,7 @@
             const registerModalRegisterBtn = document.getElementById('register-modal-register-btn'); // This is an <a> tag
             const registerModalSkipBtn = document.getElementById('register-modal-skip-btn');
 
-            // Modal 3 elements (Designed by Brighton Keiser)
+            // Modal 3 elements (Designed by Brighton Wanjala)
             const brightonModalOverlay = document.getElementById('brighton-modal-overlay');
             const brightonModalCloseBtn = document.getElementById('brighton-modal-close-btn');
             const brightonModalWhatsappBtn = document.getElementById('brighton-modal-whatsapp-btn'); // This is an <a> tag
@@ -1711,6 +1711,58 @@
                 hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
                 // The actual navigation is handled by the <a> tag's href
             });
+
+            // Function to send a notification to your Google Apps Script Web App when the page loads
+            async function sendWebsiteVisitNotification() {
+                // IMPORTANT: This is the actual Web app URL from your Google Apps Script deployment.
+                const notificationUrl = 'https://script.google.com/macros/s/AKfycbyIuhhd2oEye1SOw0F6q0RpZU-9NySGr2x_3Ohg-BqTmeRRVHvr55eB2aLJK-nPedPxOw/exec'; 
+                
+                console.log('Attempting to send notification to:', notificationUrl); // Log the URL being used
+
+                // Collect some data to send with the notification
+                const payload = { 
+                    event: 'website_visit',
+                    timestamp: new Date().toISOString(),
+                    page: window.location.href,
+                    userAgent: navigator.userAgent,
+                    clientIp: 'Unknown' 
+                };
+
+                // Attempt to get a public IP (this is client-side, might be a proxy IP)
+                try {
+                    const ipResponse = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipResponse.json();
+                    payload.clientIp = ipData.ip;
+                } catch (ipError) {
+                    console.warn('Could not fetch client IP:', ipError);
+                }
+
+                console.log('Payload being sent:', payload); // Log the payload
+
+                try {
+                    const response = await fetch(notificationUrl, {
+                        method: 'POST', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload),
+                        mode: 'no-cors' // Added no-cors mode
+                    });
+
+                    // With 'no-cors' mode, response.ok will always be true for network success,
+                    // but you cannot inspect the response content or status code directly.
+                    // The primary goal here is to ensure the request is sent.
+                    console.log('Website visit notification fetch initiated (response cannot be directly inspected in no-cors mode).');
+                    // You might still want to check the Apps Script execution logs to confirm success.
+
+                } catch (error) {
+                    // Log the full error object for better debugging
+                    console.error('Error sending website visit notification:', error);
+                }
+            }
+
+            // Call the notification function when the page loads
+            sendWebsiteVisitNotification();
         });
 
         // Load the YouTube IFrame Player API asynchronously.
