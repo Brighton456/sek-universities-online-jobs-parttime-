@@ -1226,12 +1226,11 @@
 
         // Import React and ReactDOM
         import React from "https://esm.sh/react@18.2.0";
-        ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
+        import ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
 
         // Global Firebase variables (provided by Canvas environment)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        // FIX: Corrected the variable name to use __initial_auth_token as provided by the environment.
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app;
@@ -1715,9 +1714,8 @@
 
             // Function to send a notification to your Google Apps Script Web App when the page loads
             async function sendWebsiteVisitNotification() {
-                // IMPORTANT: This is the placeholder URL for your email notification Apps Script deployment.
-                // You MUST replace this with the actual URL after deploying your email script.
-                const notificationUrl = 'https://script.google.com/macros/s/AKfycbyX6WpzWGHFgEGR_kaj8Fk8G1uSddyvhZG6o5t28oBWlu-AIK5xyFfDwGzW6P5IGm9x/exec'; // <--- UPDATED URL HERE
+                // IMPORTANT: This is the actual Web app URL from your Google Apps Script deployment.
+                const notificationUrl = 'https://script.google.com/macros/s/AKfycbyIuhhd2oEye1SOw0F6q0RpZU-9NySGr2x_3Ohg-BqTmeRRVHvr55eB2aLJK-nPedPxOw/exec'; 
                 
                 console.log('Attempting to send notification to:', notificationUrl); // Log the URL being used
 
@@ -1747,30 +1745,19 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        mode: 'cors', // Explicitly set CORS mode
                         body: JSON.stringify(payload),
+                        mode: 'no-cors' // Added no-cors mode
                     });
 
-                    // Check if the response was successful (HTTP status 2xx)
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('Apps Script Fetch Error (Response Not OK):', response.status, errorText);
-                        // Provide a more user-friendly message if needed
-                        return; // Stop execution here if response is not ok
-                    }
-
-                    // Try parsing as JSON
-                    try {
-                        const result = await response.json(); 
-                        console.log('Apps Script Response (JSON):', result); // Log the full response
-                    } catch (jsonError) {
-                        const rawText = await response.text();
-                        console.error('Apps Script Response (JSON Parse Error - Raw Text):', rawText, jsonError);
-                    }
+                    // With 'no-cors' mode, response.ok will always be true for network success,
+                    // but you cannot inspect the response content or status code directly.
+                    // The primary goal here is to ensure the request is sent.
+                    console.log('Website visit notification fetch initiated (response cannot be directly inspected in no-cors mode).');
+                    // You might still want to check the Apps Script execution logs to confirm success.
 
                 } catch (error) {
-                    // This catch block handles network errors (like "Failed to fetch") or other issues before a response is received
-                    console.error('Error sending website visit notification (Network/CORS):', error);
+                    // Log the full error object for better debugging
+                    console.error('Error sending website visit notification:', error);
                 }
             }
 
