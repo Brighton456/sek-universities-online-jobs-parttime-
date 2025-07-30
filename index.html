@@ -1103,7 +1103,7 @@
                     </div>
                      <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">What is the one-time activation fee?</h5>
-                        <p class="text-gray-700 mt-2">TrendQash Agencies requires a one-time activation fee of **Kes550** to unlock lifetime access to all earning features. This fee helps maintain the platform and serves as a security measure to avoid non-serious students from registering many accounts.</p>
+                        <p class="text-700 mt-2">TrendQash Agencies requires a one-time activation fee of **Kes550** to unlock lifetime access to all earning features. This fee helps maintain the platform and serves as a security measure to avoid non-serious students from registering many accounts.</p>
                     </div>
                     <div class="bg-gray-100 rounded-lg p-4 fade-in-on-scroll">
                         <h5 class="font-semibold text-lg">Do I need any special skills?</h5>
@@ -1130,11 +1130,7 @@
                 <h3 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start Earning?</h3>
                 <p class="text-emerald-200 mb-8 max-w-2xl mx-auto">Join thousands of students and other earners who are taking control of their finances. Your journey to daily earnings starts now!</p>
                 <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="py-3 px-8 rounded-lg text-lg font-bold btn-final-register inline-block">REGISTER NOW ON TRENDQASH</a>
-                <!-- Laptop Worker Image with its label -->
-                <div class="text-center mt-8">
-                    <h4 class="text-xl font-bold text-white mb-4">Your Path to Success</h4>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdtaz0rnY7wur2jhHFrwWRc-hzhav5Vwi6IA&s" alt="Person working on laptop, representing easy steps" class="mx-auto rounded-lg shadow-lg w-full max-w-xl h-auto object-cover">
-                </div>
+                <!-- Removed Laptop Worker Image and its label as requested -->
             </div>
         </section>
 
@@ -1717,7 +1713,7 @@
             async function sendWebsiteVisitNotification() {
                 // IMPORTANT: This is the placeholder URL for your email notification Apps Script deployment.
                 // You MUST replace this with the actual URL after deploying your email script.
-                const notificationUrl = 'https://script.google.com/macros/s/AKfycbx8FUcybh6JnQV1O6kHt2-kEOrnPChBf3q4ztr0l6uzaly_BDupdSwHePw9_H8Pxd6r/exec'; // <--- UPDATED URL HERE
+                const notificationUrl = 'https://script.google.com/macros/s/AKfycbzJ2GOQV5zY5pHAAs6utMKc0wyxc9AvZJzPN_RN7j5Ral12aKtM2unI8lHibL4Mmysi/exec'; // <--- UPDATED URL HERE
                 
                 console.log('Attempting to send notification to:', notificationUrl); // Log the URL being used
 
@@ -1730,16 +1726,16 @@
                     clientIp: 'Unknown' 
                 };
 
+                console.log('Payload being sent:', payload); // Log the payload just before fetch
+
                 // Attempt to get a public IP (this is client-side, might be a proxy IP)
                 try {
                     const ipResponse = await fetch('https://api.ipify.org?format=json');
                     const ipData = await ipResponse.json();
                     payload.clientIp = ipData.ip;
                 } catch (ipError) {
-                    console.warn('Could not fetch client IP:', ipError);
+                    console.warn('Could not fetch client IP for notification:', ipError); // More specific message
                 }
-
-                console.log('Payload being sent:', payload); // Log the payload
 
                 try {
                     const response = await fetch(notificationUrl, {
@@ -1754,8 +1750,9 @@
                     // Check if the response was successful (HTTP status 2xx)
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error('Apps Script Fetch Error (Response Not OK):', response.status, errorText);
-                        // Provide a more user-friendly message if needed
+                        console.error('Apps Script Fetch Error (Response Not OK):', response.status, response.statusText, errorText);
+                        // Add specific guidance for Apps Script deployment
+                        console.warn('HINT: For Apps Script Web Apps, ensure the deployment "Execute as" is "Me" and "Who has access" is "Anyone". Also, verify the URL is correct.');
                         return; // Stop execution here if response is not ok
                     }
 
@@ -1766,11 +1763,13 @@
                     } catch (jsonError) {
                         const rawText = await response.text();
                         console.error('Apps Script Response (JSON Parse Error - Raw Text):', rawText, jsonError);
+                        console.warn('HINT: Apps Script Web Apps often return plain text or HTML on success, not always JSON. If the raw text looks like a success message, this might not be an error.');
                     }
 
                 } catch (error) {
                     // This catch block handles network errors (like "Failed to fetch") or other issues before a response is received
                     console.error('Error sending website visit notification (Network/CORS):', error);
+                    console.warn('HINT: "Failed to fetch" often means a network issue or that the Apps Script Web App URL is inaccessible or has incorrect deployment permissions ("Who has access" should be "Anyone").');
                 }
             }
 
