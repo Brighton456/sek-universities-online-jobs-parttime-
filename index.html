@@ -1206,7 +1206,7 @@
             <h3 class="brighton-modal-title">Designed by Brighton Wanjala</h3>
             <p class="brighton-modal-description">This website was crafted by Brighton Wanjala, a highly skilled Web Designer and Developer. Interested in a stunning website for yourself?</p>
             <div class="modal-buttons">
-                <a href="https://api.whatsapp.com/send?phone=254720363215&text=hello+Mr+Brighton.+I+have+analysed+one+of+your+websites+and+have+been+fully+convinced+that+you+are+the+best.++I+would+kindly+request+your+team+to+desighn+one+for+me.++TELL+ME+MORE+ABOUT+YOUR+WORK+AND+PROJECT+DELIVERY" target="_blank" rel="noopener noreferrer" id="brighton-modal-whatsapp-btn" class="brighton-modal-button whatsapp-btn flex items-center justify-center">
+                <a href="https://api.whatsapp.com/send?phone=254720363215&text=hello+Mr+Brighton.+I+have+analysed+one+of+your+websites+and+been+fully+convinced+that+you+are+the+best.++I+would+kindly+request+your+team+to+desighn+one+for+me.++TELL+ME+MORE+ABOUT+YOUR+WORK+AND+PROJECT+DELIVERY" target="_blank" rel="noopener noreferrer" id="brighton-modal-whatsapp-btn" class="brighton-modal-button whatsapp-btn flex items-center justify-center">
                     <i class="fab fa-whatsapp mr-2"></i> WhatsApp Brighton
                 </a>
                 <button id="brighton-modal-skip-btn" class="brighton-modal-button skip-btn">Skip</button>
@@ -1227,17 +1227,109 @@
         // Global Firebase variables (provided by Canvas environment)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        // FIX: Corrected the variable name to use __initial_auth_token as provided by the environment.
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let app;
         let db;
         let auth;
         let userId = null;
-        let musicPromptDismissed = false; // Flag to track if the music prompt has been dismissed
-        let wasBackgroundMusicPlayingBeforeVideo = false; // Flag to track background music state before video plays
-        let isModalActive = false; // Flag to prevent multiple modals from showing simultaneously
-        let currentModalTimeout = null; // To store the timeout ID for the next modal
+        let musicPromptDismissed = false;
+        let wasBackgroundMusicPlayingBeforeVideo = false;
+        let isModalActive = false;
+        let currentModalTimeout = null;
+
+        // Keep track of logged-in users to distinguish first-time vs. continuous logins
+        // This is a simple client-side check. For robust tracking, use a backend database.
+        const loggedInUsers = new Set(JSON.parse(localStorage.getItem('loggedInUsers') || '[]'));
+
+        /**
+         * Helper function to perform fetch with exponential backoff.
+         * @param {string} url The URL to fetch.
+         * @param {object} options Fetch options (method, headers, body, etc.).
+         * @param {number} retries Remaining retries.
+         * @param {number} delay Current delay before next retry.
+         * @returns {Promise<Response>} The fetch response.
+         */
+        async function retryFetch(url, options, retries = 3, delay = 1000) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Fetch Error (Response Not OK) for ${url}:`, response.status, response.statusText, errorText);
+                    if (retries > 0) {
+                        console.warn(`Retrying in ${delay / 1000}s... (Retries left: ${retries})`);
+                        await new Promise(res => setTimeout(res, delay));
+                        return retryFetch(url, options, retries - 1, delay * 2); // Exponential backoff
+                    } else {
+                        throw new Error(`Failed after multiple retries: ${response.status} ${response.statusText} - ${errorText}`);
+                    }
+                }
+                return response;
+            } catch (error) {
+                if (retries > 0) {
+                    console.warn(`Network Error for ${url}: ${error.message}. Retrying in ${delay / 1000}s... (Retries left: ${retries})`);
+                    await new Promise(res => setTimeout(res, delay));
+                    return retryFetch(url, options, retries - 1, delay * 2); // Exponential backoff
+                } else {
+                    throw error; // Re-throw if no retries left
+                }
+            }
+        }
+
+        // Function to send login notifications to Apps Script
+        async function sendLoginNotification(user) {
+            // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL for email notifications
+            const notificationUrl = 'https://script.google.com/macros/s/AKfycbzVtUteI8KkdKyS5MrdKmhw1LJkyf8zBjqDe6TaeC5WkRG4cJ968gQWHnxXxW6oIuMB/exec'; 
+
+            if (!notificationUrl || notificationUrl === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                console.warn("Login notification URL is not configured. Please update 'notificationUrl' in sendLoginNotification function.");
+                return;
+            }
+
+            let loginType = 'continuous_login';
+            if (!loggedInUsers.has(user.uid)) {
+                loginType = 'first_time_login';
+                loggedInUsers.add(user.uid);
+                localStorage.setItem('loggedInUsers', JSON.stringify(Array.from(loggedInUsers)));
+            }
+
+            const payload = {
+                event: 'user_login',
+                loginType: loginType, // 'first_time_login' or 'continuous_login'
+                userId: user.uid,
+                email: user.email || 'N/A', // Firebase user might not always have an email
+                timestamp: new Date().toISOString(),
+                page: window.location.href,
+                userAgent: navigator.userAgent,
+                clientIp: 'Unknown' // Client IP is best fetched server-side for accuracy
+            };
+
+            console.log(`Sending ${loginType} notification for user: ${user.uid}`);
+
+            try {
+                const response = await retryFetch(notificationUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify(payload),
+                });
+
+                // If retryFetch completed without throwing an error, response is ok
+                try {
+                    const result = await response.json(); 
+                    console.log('Login Notification Response:', result);
+                } catch (jsonError) {
+                    const rawText = await response.text();
+                    console.error('Login Notification Response (JSON Parse Error - Raw Text):', rawText, jsonError);
+                    console.warn('HINT: Apps Script Web Apps often return plain text or HTML on success, not always JSON. If the raw text looks like a success message, this might not be an error.');
+                }
+            } catch (error) {
+                console.error('Error sending login notification (Network/CORS):', error);
+                console.warn('HINT: This often means a persistent network issue, an inaccessible Apps Script Web App URL, or incorrect deployment permissions (e.g., "Who has access" should be "Anyone").');
+            }
+        }
 
         // Initialize Firebase and authenticate
         async function initializeFirebase() {
@@ -1253,11 +1345,13 @@
                     await signInAnonymously(auth);
                 }
 
-                // Listen for auth state changes to set userId
+                // Listen for auth state changes to set userId and send login notifications
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("Firebase User ID:", userId);
+                        // Send login notification
+                        sendLoginNotification(user);
                         // Once authenticated, render the React app
                         renderReactApp();
                     } else {
@@ -1270,7 +1364,6 @@
 
             } catch (error) {
                 console.error("Error initializing Firebase or authenticating:", error);
-                // Even if Firebase fails, try to render the React app with a fallback
                 renderReactApp();
             }
         }
@@ -1289,7 +1382,6 @@
                         return;
                     }
                     try {
-                        // Using a public collection for opportunities
                         const opportunitiesCol = collection(db, `artifacts/${appId}/public/data/opportunities`);
                         const opportunitySnapshot = await getDocs(opportunitiesCol);
                         const opportunitiesList = opportunitySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1302,13 +1394,9 @@
                     }
                 };
 
-                // Only fetch if Firebase is ready (db is not null)
                 if (db) {
                     fetchOpportunities();
                 } else {
-                    // If db is not ready immediately, wait for it (or handle gracefully)
-                    // For this example, we'll assume initializeFirebase will eventually set db.
-                    // A more robust solution might involve a state variable for Firebase readiness.
                     const checkDbInterval = setInterval(() => {
                         if (db) {
                             clearInterval(checkDbInterval);
@@ -1316,7 +1404,7 @@
                         }
                     }, 100);
                 }
-            }, []); // Empty dependency array means this runs once on mount
+            }, []);
 
             if (loading) {
                 return React.createElement("div", { className: "col-span-full flex justify-center items-center py-10" },
@@ -1350,9 +1438,9 @@
                         React.createElement("iframe", {
                             src: opportunity.videoUrl,
                             title: opportunity.title,
-                            frameBorder: "0", // Note: frameborder in HTML becomes frameBorder in React JSX
+                            frameBorder: "0",
                             allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-                            allowFullScreen: true, // Note: allowfullscreen in HTML becomes allowFullScreen in React JSX
+                            allowFullScreen: true,
                             className: "w-full h-full"
                         })
                     )
@@ -1371,7 +1459,6 @@
 
         // Vanilla JS for general page functionality
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize Firebase and authentication
             initializeFirebase();
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -1381,28 +1468,24 @@
             const musicToggleButtonDesktop = document.getElementById('music-toggle-button-desktop');
             const musicToggleButtonMobile = document.getElementById('music-toggle-button-mobile');
             const musicPrompt = document.getElementById('music-prompt');
-            const musicPromptCloseButton = document.getElementById('music-prompt-close'); // Get the close button
+            const musicPromptCloseButton = document.getElementById('music-prompt-close');
 
-            // Modal 1 elements (Don't Miss Out)
             const posterModalOverlay = document.getElementById('poster-modal-overlay');
             const modalCloseBtn = document.getElementById('modal-close-btn');
             const modalExploreBtn = document.getElementById('modal-explore-btn');
             const modalSkipBtn = document.getElementById('modal-skip-btn');
 
-            // Modal 2 elements (Register to Start Earning)
             const registerModalOverlay = document.getElementById('register-modal-overlay');
             const registerModalCloseBtn = document.getElementById('register-modal-close-btn');
-            const registerModalRegisterBtn = document.getElementById('register-modal-register-btn'); // This is an <a> tag
+            const registerModalRegisterBtn = document.getElementById('register-modal-register-btn');
             const registerModalSkipBtn = document.getElementById('register-modal-skip-btn');
 
-            // Modal 3 elements (Designed by Brighton Wanjala)
             const brightonModalOverlay = document.getElementById('brighton-modal-overlay');
             const brightonModalCloseBtn = document.getElementById('brighton-modal-close-btn');
-            const brightonModalWhatsappBtn = document.getElementById('brighton-modal-whatsapp-btn'); // This is an <a> tag
+            const brightonModalWhatsappBtn = document.getElementById('brighton-modal-whatsapp-btn');
             const brightonModalSkipBtn = document.getElementById('brighton-modal-skip-btn');
 
 
-            // Function to update music toggle button icon and prompt visibility
             const updateMusicIconAndPrompt = () => {
                 const iconClass = backgroundMusic.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
                 if (musicToggleButtonDesktop) {
@@ -1412,7 +1495,6 @@
                     musicToggleButtonMobile.querySelector('i').className = iconClass;
                 }
 
-                // Show prompt if music is muted and not dismissed
                 if (backgroundMusic.muted && !musicPromptDismissed) {
                     musicPrompt.classList.add('show');
                 } else {
@@ -1420,38 +1502,33 @@
                 }
             };
 
-            // Smoothly fade in audio volume
             const fadeInAudio = (audioElement) => {
                 audioElement.volume = 0;
-                audioElement.muted = false; // Ensure it's unmuted before fading in
+                audioElement.muted = false;
                 const fadeInterval = setInterval(() => {
-                    if (audioElement.volume < 0.5) { // Fade to 50% volume
+                    if (audioElement.volume < 0.5) {
                         audioElement.volume += 0.05;
                     } else {
                         clearInterval(fadeInterval);
                     }
-                }, 200); // Adjust interval and increment for desired fade speed
+                }, 200);
             };
 
-            // Toggle music play/pause and mute/unmute
             const toggleMusic = async () => {
                 if (backgroundMusic.muted) {
                     backgroundMusic.muted = false;
-                    musicPromptDismissed = true; // Dismiss prompt when user interacts to unmute
+                    musicPromptDismissed = true;
                     try {
-                        // Ensure the audio is loaded before attempting to play
-                        if (backgroundMusic.readyState < 2) { // HTMLMediaElement.HAVE_CURRENT_DATA
+                        if (backgroundMusic.readyState < 2) {
                             backgroundMusic.load();
                         }
                         await backgroundMusic.play();
-                        fadeInAudio(backgroundMusic); // Fade in after playing
+                        fadeInAudio(backgroundMusic);
                         console.log("Music unmuted and playing.");
                     } catch (error) {
                         console.error("Error attempting to play music:", error);
-                        // Re-mute if play failed to reflect actual state
                         backgroundMusic.muted = true;
                         backgroundMusic.pause();
-                        // Potentially show a message to the user that autoplay was blocked
                     }
                 } else {
                     backgroundMusic.muted = true;
@@ -1461,26 +1538,22 @@
                 updateMusicIconAndPrompt();
             };
 
-            // Event listener for the music prompt's close button
             if (musicPromptCloseButton) {
                 musicPromptCloseButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent click from bubbling up to the prompt div itself
+                    e.stopPropagation();
                     musicPromptDismissed = true;
                     musicPrompt.classList.remove('show');
                 });
             }
 
-            // Event listener for the music prompt itself
             if (musicPrompt) {
                 musicPrompt.addEventListener('click', (e) => {
-                    // Only trigger toggleMusic if the click was directly on the prompt, not its children (like the close button)
                     if (e.target === musicPrompt || e.target.parentNode === musicPrompt) {
                         toggleMusic();
                     }
                 });
             }
 
-            // Attach event listeners to both desktop and mobile music toggle buttons
             if (musicToggleButtonDesktop) {
                 musicToggleButtonDesktop.addEventListener('click', toggleMusic);
             }
@@ -1488,27 +1561,21 @@
                 musicToggleButtonMobile.addEventListener('click', toggleMusic);
             }
 
-            // Ensure icon and prompt are correct on load (after potential autoplay attempts)
             backgroundMusic.addEventListener('canplaythrough', updateMusicIconAndPrompt);
-            backgroundMusic.addEventListener('volumechange', updateMusicIconAndPrompt); // Update if volume changes (e.g., user manually unmutes)
+            backgroundMusic.addEventListener('volumechange', updateMusicIconAndPrompt);
             backgroundMusic.addEventListener('play', updateMusicIconAndPrompt);
             backgroundMusic.addEventListener('pause', updateMusicIconAndPrompt);
 
-            // Initial icon and prompt update
             updateMusicIconAndPrompt();
 
-
-            // Mobile menu toggle
             mobileMenuButton.addEventListener('click', function () {
                 mobileMenu.classList.toggle('hidden');
             });
 
-            // Smooth scrolling for navigation links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     
-                    // If it's a mobile menu link, close the menu
                     if (mobileMenu.contains(this)) {
                         mobileMenu.classList.add('hidden');
                     }
@@ -1524,40 +1591,35 @@
                 });
             });
 
-            // Video Playback Logic for "Significant Earnings" Video
             const studentGroupImage = document.getElementById('studentGroupImage');
             const significantEarningsVideoContainer = document.getElementById('significantEarningsVideoContainer');
             const watchNowOverlay = document.getElementById('watchNowOverlay');
-            const videoId = '3NYz7WnYp1g'; // YouTube video ID for "Significant Earnings"
+            const videoId = '3NYz7WnYp1g';
 
             if (watchNowOverlay) {
                 watchNowOverlay.addEventListener('click', function (e) {
                     e.preventDefault();
                     
-                    // Check if background music is currently playing and store its state
                     if (!backgroundMusic.paused && !backgroundMusic.muted) {
                         wasBackgroundMusicPlayingBeforeVideo = true;
-                        backgroundMusic.pause(); // Pause background music
+                        backgroundMusic.pause();
                     } else {
                         wasBackgroundMusicPlayingBeforeVideo = false;
                     }
 
-                    // Hide the image and the overlay
                     studentGroupImage.classList.add('hidden');
                     watchNowOverlay.classList.add('hidden');
 
-                    // Show the video player container
                     significantEarningsVideoContainer.classList.remove('hidden');
 
-                    // Create the YouTube player if it doesn't exist, or load the video if it does
                     if (!player) {
                         player = new YT.Player('significantEarningsVideo', {
                             videoId: videoId,
                             playerVars: {
                                 'autoplay': 1,
                                 'controls': 1,
-                                'rel': 0, // Do not show related videos
-                                'modestbranding': 1 // No YouTube logo in the control bar
+                                'rel': 0,
+                                'modestbranding': 1
                             },
                             events: {
                                 'onReady': onPlayerReady,
@@ -1565,7 +1627,6 @@
                             }
                         });
                     } else {
-                        // If player already exists (e.g., user played, paused, then clicked again)
                         player.loadVideoById(videoId);
                         player.playVideo();
                     }
@@ -1577,29 +1638,22 @@
             }
 
             function onPlayerStateChange(event) {
-                // YT.PlayerState.PAUSED (2)
-                // YT.PlayerState.ENDED (0)
                 if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                    // Hide the video container
                     significantEarningsVideoContainer.classList.add('hidden');
-                    // Show the image and the overlay
                     studentGroupImage.classList.remove('hidden');
                     watchNowOverlay.classList.remove('hidden');
-                    // Stop the video and clear its source to prevent background audio
                     if (player) {
                         player.stopVideo();
                         player.clearVideo();
                     }
 
-                    // Resume background music if it was playing before the video and not manually muted
                     if (wasBackgroundMusicPlayingBeforeVideo && !backgroundMusic.muted) {
                         backgroundMusic.play();
                     }
-                    wasBackgroundMusicPlayingBeforeVideo = false; // Reset flag
+                    wasBackgroundMusicPlayingBeforeVideo = false;
                 }
             }
 
-            // Intersection Observer for fade-in-on-scroll animation
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1607,23 +1661,21 @@
                     }
                 });
             }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
+                threshold: 0.1
             });
 
             document.querySelectorAll('.fade-in-on-scroll').forEach(element => {
                 observer.observe(element);
             });
 
-            // Back to Top button visibility
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) { // Show button after scrolling 300px
+                if (window.scrollY > 300) {
                     backToTopButton.classList.add('show');
                 } else {
                     backToTopButton.classList.remove('show');
                 }
             });
 
-            // Back to Top button click handler
             backToTopButton.addEventListener('click', () => {
                 window.scrollTo({
                     top: 0,
@@ -1631,7 +1683,6 @@
                 });
             });
 
-            // Function to show a modal
             function showModal(modalElement) {
                 if (!isModalActive) {
                     modalElement.classList.add('show');
@@ -1639,12 +1690,10 @@
                 }
             }
 
-            // Function to hide a modal and schedule the next one
             function hideModal(modalElement, nextModalFunction = null, nextModalDelay = 0) {
                 modalElement.classList.remove('show');
-                isModalActive = false; // Reset the flag when a modal is hidden
+                isModalActive = false;
 
-                // Clear any existing timeout to prevent multiple calls
                 if (currentModalTimeout) {
                     clearTimeout(currentModalTimeout);
                     currentModalTimeout = null;
@@ -1653,71 +1702,57 @@
                 if (nextModalFunction) {
                     currentModalTimeout = setTimeout(() => {
                         nextModalFunction();
-                        currentModalTimeout = null; // Clear timeout ID after execution
+                        currentModalTimeout = null;
                     }, nextModalDelay);
                 }
             }
 
-            // Define the sequence of modal appearances
             const showFirstModal = () => showModal(posterModalOverlay);
             const showSecondModal = () => showModal(registerModalOverlay);
             const showThirdModal = () => showModal(brightonModalOverlay);
-            // The Z-cycle now restarts from the second modal
             const restartZCycle = () => {
                 console.log("Restarting Z-cycle (from second modal)");
                 showSecondModal();
             }; 
 
-            // Initial call for the first modal (one-time appearance)
             setTimeout(showFirstModal, 3000);
 
-            // Event listeners for Modal 1 (Don't Miss Out)
             modalCloseBtn.addEventListener('click', () => {
-                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+                hideModal(posterModalOverlay, showSecondModal, 10000);
             });
             modalExploreBtn.addEventListener('click', () => {
-                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+                hideModal(posterModalOverlay, showSecondModal, 10000);
             });
             modalSkipBtn.addEventListener('click', () => {
-                hideModal(posterModalOverlay, showSecondModal, 10000); // 10 seconds after closing Modal 1
+                hideModal(posterModalOverlay, showSecondModal, 10000);
             });
 
-            // Event listeners for Modal 2 (Register to Start Earning)
             registerModalCloseBtn.addEventListener('click', () => {
-                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
+                hideModal(registerModalOverlay, showThirdModal, 15000);
             });
             registerModalSkipBtn.addEventListener('click', () => {
-                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
+                hideModal(registerModalOverlay, showThirdModal, 15000);
             });
-            // For the register button, it acts like a skip/close for the modal, but also navigates
             registerModalRegisterBtn.addEventListener('click', () => {
-                hideModal(registerModalOverlay, showThirdModal, 15000); // 15 seconds after closing Modal 2
-                // The actual navigation is handled by the <a> tag's href
+                hideModal(registerModalOverlay, showThirdModal, 15000);
             });
 
-
-            // Event listeners for Modal 3 (Designed by Brighton Wanjala)
             brightonModalCloseBtn.addEventListener('click', () => {
-                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
+                hideModal(brightonModalOverlay, restartZCycle, 20000);
             });
             brightonModalSkipBtn.addEventListener('click', () => {
-                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
+                hideModal(brightonModalOverlay, restartZCycle, 20000);
             });
-            // For the WhatsApp button, it acts like a skip/close for the modal, but also navigates
             brightonModalWhatsappBtn.addEventListener('click', () => {
-                hideModal(brightonModalOverlay, restartZCycle, 20000); // 20 seconds after closing Modal 3, restart Z-cycle (from Modal 2)
-                // The actual navigation is handled by the <a> tag's href
+                hideModal(brightonModalOverlay, restartZCycle, 20000);
             });
 
-            // Function to send a notification to your Google Apps Script Web App when the page loads
+            // Original sendWebsiteVisitNotification function (now only sending website visit)
             async function sendWebsiteVisitNotification() {
-                // IMPORTANT: This is the placeholder URL for your email notification Apps Script deployment.
-                // You MUST replace this with the actual URL after deploying your email script.
-                const notificationUrl = 'https://script.google.com/macros/s/AKfycbzJ2GOQV5zY5pHAAs6utMKc0wyxc9AvZJzPN_RN7j5Ral12aKtM2unI8lHibL4Mmysi/exec'; // <--- UPDATED URL HERE
+                const notificationUrl = 'https://script.google.com/macros/s/AKfycbzVtUteI8KkdKyS5MrdKmhw1LJkyf8zBjqDe6TaeC5WkRG4cJ968gQWHnxXxW6oIuMB/exec'; 
                 
-                console.log('Attempting to send notification to:', notificationUrl); // Log the URL being used
+                console.log('Attempting to send website visit notification to:', notificationUrl);
 
-                // Collect some data to send with the notification
                 const payload = { 
                     event: 'website_visit',
                     timestamp: new Date().toISOString(),
@@ -1726,68 +1761,50 @@
                     clientIp: 'Unknown' 
                 };
 
-                console.log('Payload being sent:', payload); // Log the payload just before fetch
+                console.log('Payload being sent for website visit:', payload);
 
-                // Attempt to get a public IP (this is client-side, might be a proxy IP)
                 try {
                     const ipResponse = await fetch('https://api.ipify.org?format=json');
                     const ipData = await ipResponse.json();
                     payload.clientIp = ipData.ip;
                 } catch (ipError) {
-                    console.warn('Could not fetch client IP for notification:', ipError); // More specific message
+                    console.warn('Could not fetch client IP for website visit notification:', ipError);
                 }
 
                 try {
-                    const response = await fetch(notificationUrl, {
+                    const response = await retryFetch(notificationUrl, {
                         method: 'POST', 
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        mode: 'cors', // Explicitly set CORS mode
+                        headers: { 'Content-Type': 'application/json' },
+                        mode: 'cors',
                         body: JSON.stringify(payload),
                     });
 
-                    // Check if the response was successful (HTTP status 2xx)
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('Apps Script Fetch Error (Response Not OK):', response.status, response.statusText, errorText);
-                        // Add specific guidance for Apps Script deployment
-                        console.warn('HINT: For Apps Script Web Apps, ensure the deployment "Execute as" is "Me" and "Who has access" is "Anyone". Also, verify the URL is correct.');
-                        return; // Stop execution here if response is not ok
-                    }
-
-                    // Try parsing as JSON
+                    // If retryFetch completed without throwing an error, response is ok
                     try {
                         const result = await response.json(); 
-                        console.log('Apps Script Response (JSON):', result); // Log the full response
+                        console.log('Apps Script Response (JSON) for website visit:', result);
                     } catch (jsonError) {
                         const rawText = await response.text();
-                        console.error('Apps Script Response (JSON Parse Error - Raw Text):', rawText, jsonError);
+                        console.error('Apps Script Response (JSON Parse Error - Raw Text) for website visit:', rawText, jsonError);
                         console.warn('HINT: Apps Script Web Apps often return plain text or HTML on success, not always JSON. If the raw text looks like a success message, this might not be an error.');
                     }
-
                 } catch (error) {
-                    // This catch block handles network errors (like "Failed to fetch") or other issues before a response is received
                     console.error('Error sending website visit notification (Network/CORS):', error);
-                    console.warn('HINT: "Failed to fetch" often means a network issue or that the Apps Script Web App URL is inaccessible or has incorrect deployment permissions ("Who has access" should be "Anyone").');
+                    console.warn('HINT: This often means a persistent network issue, an inaccessible Apps Script Web App URL, or incorrect deployment permissions (e.g., "Who has access" should be "Anyone").');
                 }
             }
 
-            // Call the notification function when the page loads
+            // Call the website visit notification function when the page loads
             sendWebsiteVisitNotification();
         });
 
-        // Load the YouTube IFrame Player API asynchronously.
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        let player; // Declare player globally for YouTube API
-        function onYouTubeIframeAPIReady() {
-            // This function is called automatically by the API when the player is ready
-            // No specific action needed here as players are created dynamically on click.
-        }
+        let player;
+        function onYouTubeIframeAPIReady() {}
     </script>
 </body>
 </html>
