@@ -11,8 +11,6 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Chosen Palette: SEKU Green Harmony -->
-    <!-- Application Structure Plan: The SPA is designed as a single, vertical-scrolling landing page to guide SEKU students through the earning opportunity logically. The flow is: Hero (attention-grabbing intro) -> What & Why (context and benefits) -> How to Earn (core offering in a clear, card-based format) -> How it Works (simple steps) -> Testimonials (social proof) -> FAQ (addressing potential concerns) -> Final CTA. This structure was chosen over a direct report copy to create a persuasive and clear user journey, building trust by university branding and gradually introducing the partner service's details, making it easy for a busy student to understand and act upon. -->
-    <!-- Visualization & Content Choices: Report Info: Earning methods (watching videos, affiliate marketing). Goal: Organize & Inform. Viz/Presentation: Interactive HTML cards with icons for each method. Interaction: Hover effects on cards. Justification: Cards are visually appealing, scannable, and organize disparate earning methods into a cohesive section. Method: Tailwind CSS Grid. Report Info: Testimonials. Goal: Inform & Persuading. Viz/Presentation: Styled blockquote cards. Justification: Isolates testimonials for impact and credibility. Method: HTML/Tailwind. Report Info: Requirements. Goal: Inform. Viz/Presentation: Simple styled list. Justification: Clear and direct presentation of necessary steps. Method: HTML/Tailwind. CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -34,7 +32,6 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed; /* Optional: for parallax effect */
-            /* REMOVED ANIMATION: background-zoom 3s infinite linear alternate, background-pan-slower 6s infinite linear alternate; */
         }
         /* Opportunities page background (video) */
         .opportunities-bg {
@@ -45,7 +42,6 @@
         .how-it-works-bg {
             position: relative; /* Needed for absolute positioning of video */
             overflow: hidden; /* Hide overflowing video */
-            /* The video background will be applied directly via HTML structure */
         }
         /* Testimonials and FAQ page background (image) */
         .testimonials-bg, .faq-bg {
@@ -771,8 +767,6 @@
 </head>
 <body class="text-gray-800">
     <!-- Background Music Audio Element -->
-    <!-- Using a royalty-free MP3 from Free Music Public Domain for reliable background audio.
-         Autoplay is muted due to browser policies. User interaction is required to unmute. -->
     <audio id="background-music" src="https://www.dropbox.com/s/ayf4cwdytqafs70/The%20Calling%20%20-%20Angelwing.mp3?raw=1" autoplay loop muted></audio>
 
     <!-- Header & Navigation -->
@@ -798,7 +792,6 @@
                     <i class="fas fa-volume-mute text-lg"></i>
                 </button>
             </nav>
-            <!-- Removed SIGN IN from header navigation -->
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 btn-header-register">Register Now</a>
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -816,7 +809,6 @@
                 <i class="fas fa-volume-mute text-lg"></i>
                 <span>Toggle Music</span>
             </button>
-            <!-- Removed SIGN IN from mobile menu -->
             <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block w-full text-center bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-emerald-800 transition duration-300">Register Now</a>
         </div>
     </header>
@@ -956,7 +948,6 @@
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">Explore the various ways you can start earning today. All you needed is your smartphone and some free time.</p>
                     <!-- Image for Earning Opportunities: Phone Earning Image with clickable button -->
                     <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl h-auto overflow-hidden group">
-                        <!-- FIX: Replaced broken image URL with a reliable placeholder -->
                         <img src="https://placehold.co/600x400/d1d5db/4b5563?text=Earn+Daily+on+Phone" class="w-full h-full object-cover" alt="Person earning money on phone">
                         
                         <!-- Opaque button over "trendqash.co.ke" -->
@@ -983,7 +974,6 @@
 
         <!-- How It Works Section -->
         <section id="how-it-works" class="py-20 how-it-works-bg">
-            <!-- FIX: Applied the same video background as the opportunities section -->
             <div class="absolute inset-0 z-0">
                 <iframe
                     src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ8&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
@@ -1115,7 +1105,6 @@
 
         <!-- Final CTA Section -->
         <section id="register" class="py-20 bg-emerald-700 text-white relative overflow-hidden">
-            <!-- FIX: Added video background to this section -->
             <div class="absolute inset-0 z-0">
                 <iframe
                     src="https://www.youtube.com/embed/_eg0yRv-AZ8?autoplay=1&mute=1&loop=1&playlist=_eg0yRv-AZ8&controls=0&showinfo=0&autohide=1&modestbranding=1&rel=0"
@@ -1130,7 +1119,6 @@
                 <h3 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start Earning?</h3>
                 <p class="text-emerald-200 mb-8 max-w-2xl mx-auto">Join thousands of students and other earners who are taking control of their finances. Your journey to daily earnings starts now!</p>
                 <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer" class="py-3 px-8 rounded-lg text-lg font-bold btn-final-register inline-block">REGISTER NOW ON TRENDQASH</a>
-                <!-- Removed Laptop Worker Image and its label as requested -->
             </div>
         </section>
 
@@ -1217,15 +1205,14 @@
     <script type="module">
         // Import necessary Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Import React and ReactDOM
         import React from "https://esm.sh/react@18.2.0";
         import ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
 
-        // Global Firebase variables (provided by Canvas environment)
-        // Your web app's Firebase configuration (replace with your values from Firebase Console)
+        // Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyA-3vVopzEos1fG0wTrHLeVWK1lCXE9UCc",
           authDomain: "seku-hub.firebaseapp.com",
@@ -1235,10 +1222,7 @@
           appId: "1:80556939281:web:4b38c77c59e7822806b9b0",
           measurementId: "G-H4BHL8NHTG"
         };
-        // The __app_id and __initial_auth_token are specific to the Canvas environment
-        // For Vercel, if you need these, you'd manage them differently (e.g., Vercel env vars for appId, or remove auth if not needed)
-        const appId = "seku-hub"; // Hardcode or fetch from a Vercel env var if needed for Firestore path
-        const initialAuthToken = null; // Not applicable for direct Vercel deployment unless you implement custom auth
+        const appId = firebaseConfig.projectId; 
 
         let app;
         let db;
@@ -1249,9 +1233,9 @@
         let isModalActive = false;
         let currentModalTimeout = null;
 
-        // Keep track of logged-in users to distinguish first-time vs. continuous logins
-        // This is a simple client-side check. For robust tracking, use a backend database.
-        const loggedInUsers = new Set(JSON.parse(localStorage.getItem('loggedInUsers') || '[]'));
+        // Flag to track if this is the very first visit for this browser
+        const IS_FIRST_VISIT_KEY = 'seku_is_first_visit';
+        let isFirstVisit = localStorage.getItem(IS_FIRST_VISIT_KEY) === null; // True if key doesn't exist
 
         /**
          * Helper function to perform fetch with exponential backoff.
@@ -1288,50 +1272,66 @@
             }
         }
 
-        // Function to send login notifications to Vercel Serverless Function
-        async function sendLoginNotification(user) {
-            // This URL points to your Vercel Serverless Function
-            const notificationUrl = '/api/email-notification'; 
+        /**
+         * Sends a comprehensive website visit/user notification to the Vercel Serverless Function.
+         * @param {string | null} currentUserId The Firebase anonymous user ID, or null if not available.
+         */
+        async function sendComprehensiveNotification(currentUserId) {
+            const notificationUrl = window.location.origin + '/api/email-notification'; 
+            
+            console.log('Attempting to send comprehensive notification to:', notificationUrl);
 
-            let loginType = 'continuous_login';
-            if (!loggedInUsers.has(user.uid)) {
-                loginType = 'first_time_login';
-                loggedInUsers.add(user.uid);
-                localStorage.setItem('loggedInUsers', JSON.stringify(Array.from(loggedInUsers)));
-            }
+            // Gather more user details
+            const referrer = document.referrer || 'Direct / Unknown';
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
+            const browserLanguage = navigator.language || 'Unknown';
+            const platform = navigator.platform || 'Unknown';
 
-            const payload = {
-                event: 'user_login',
-                loginType: loginType,
-                userId: user.uid,
-                email: user.email || 'N/A',
+            const payload = { 
+                eventType: isFirstVisit ? 'first_time_website_visit' : 'returning_website_visit',
                 timestamp: new Date().toISOString(),
                 page: window.location.href,
+                userId: currentUserId || 'Anonymous (no ID)', // Use the Firebase userId
                 userAgent: navigator.userAgent,
-                clientIp: 'Unknown'
+                clientIp: 'Unknown', // Will be updated by ipify
+                referrer: referrer,
+                screenResolution: screenResolution,
+                browserLanguage: browserLanguage,
+                platform: platform
             };
 
-            console.log(`Sending ${loginType} notification for user: ${user.uid} to ${notificationUrl}`);
+            console.log('Payload being sent for comprehensive notification:', payload);
+
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                payload.clientIp = ipData.ip;
+            } catch (ipError) {
+                console.warn('Could not fetch client IP for notification:', ipError);
+            }
 
             try {
                 const response = await retryFetch(notificationUrl, {
-                    method: 'POST', // Changed back to POST for serverless function
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 });
 
                 try {
                     const result = await response.json(); 
-                    console.log('Login Notification Response:', result);
+                    console.log('Vercel Function Response (JSON) for notification:', result);
                 } catch (jsonError) {
                     const rawText = await response.text();
-                    console.error('Login Notification Response (JSON Parse Error - Raw Text):', rawText, jsonError);
+                    console.error('Vercel Function Response (JSON Parse Error - Raw Text) for notification:', rawText, jsonError);
                     console.warn('HINT: Your Vercel function should return JSON. If not, check its implementation.');
                 }
+
+                // Mark that this browser has visited before
+                localStorage.setItem(IS_FIRST_VISIT_KEY, 'true');
+                isFirstVisit = false; // Update flag for subsequent calls within the same session
+
             } catch (error) {
-                console.error('Error sending login notification (Network/CORS):', error);
+                console.error('Error sending comprehensive notification (Network/CORS):', error);
                 console.warn('HINT: Ensure your Vercel serverless function is deployed and correctly configured with CORS headers.');
             }
         }
@@ -1343,31 +1343,36 @@
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // Sign in with custom token if available, otherwise anonymously
-                // For direct Vercel deployment, __initial_auth_token is not available.
-                // We'll use signInAnonymously if no specific auth method is implemented.
+                // IMPORTANT: For 'auth/configuration-not-found' error:
+                // Go to your Firebase project console -> Authentication -> Sign-in method tab.
+                // Ensure 'Anonymous' is enabled.
                 await signInAnonymously(auth);
                 
-
-                // Listen for auth state changes to set userId and send login notifications
+                // Listen for auth state changes to set userId and send notifications
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("Firebase User ID:", userId);
-                        // Send login notification
-                        sendLoginNotification(user);
+                        // Send comprehensive notification with the user ID
+                        sendComprehensiveNotification(userId);
                         // Once authenticated, render the React app
                         renderReactApp();
                     } else {
                         userId = null;
                         console.log("No user signed in.");
                         // If no user, still try to render the app, but dynamic content might be limited
+                        sendComprehensiveNotification(null); // Send notification even without a user ID
                         renderReactApp();
                     }
                 });
 
             } catch (error) {
                 console.error("Error initializing Firebase or authenticating:", error);
+                if (error.code === 'auth/configuration-not-found') {
+                    console.warn("Firebase Authentication Error: 'auth/configuration-not-found'. Please ensure Anonymous Authentication is enabled in your Firebase project settings (Authentication -> Sign-in method tab).");
+                }
+                // Even if Firebase auth fails, try to send a basic notification and render the app
+                sendComprehensiveNotification(null); 
                 renderReactApp();
             }
         }
@@ -1386,7 +1391,6 @@
                         return;
                     }
                     try {
-                        // Use the hardcoded appId for the Firestore path
                         const opportunitiesCol = collection(db, `artifacts/${appId}/public/data/opportunities`);
                         const opportunitySnapshot = await getDocs(opportunitiesCol);
                         const opportunitiesList = opportunitySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1399,17 +1403,18 @@
                     }
                 };
 
-                if (db) {
+                // Ensure Firebase is initialized before fetching
+                if (app && db) {
                     fetchOpportunities();
                 } else {
-                    const checkDbInterval = setInterval(() => {
-                        if (db) {
-                            clearInterval(checkDbInterval);
+                    const checkFirebaseInterval = setInterval(() => {
+                        if (app && db) {
+                            clearInterval(checkFirebaseInterval);
                             fetchOpportunities();
                         }
                     }, 100);
                 }
-            }, []);
+            }, [app, db]); // Depend on app and db to re-run when they are initialized
 
             if (loading) {
                 return React.createElement("div", { className: "col-span-full flex justify-center items-center py-10" },
@@ -1464,7 +1469,7 @@
 
         // Vanilla JS for general page functionality
         document.addEventListener('DOMContentLoaded', function () {
-            initializeFirebase();
+            initializeFirebase(); // Initialize Firebase first, which will then trigger notification and React render
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -1751,55 +1756,6 @@
             brightonModalWhatsappBtn.addEventListener('click', () => {
                 hideModal(brightonModalOverlay, restartZCycle, 20000);
             });
-
-            // Function to send website visit notification to Vercel Serverless Function
-            async function sendWebsiteVisitNotification() {
-                // This URL points to your Vercel Serverless Function
-                const notificationUrl = '/api/email-notification'; 
-                
-                console.log('Attempting to send website visit notification to:', notificationUrl);
-
-                const payload = { 
-                    event: 'website_visit',
-                    timestamp: new Date().toISOString(),
-                    page: window.location.href,
-                    userAgent: navigator.userAgent,
-                    clientIp: 'Unknown' 
-                };
-
-                console.log('Payload being sent for website visit:', payload);
-
-                try {
-                    const ipResponse = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipResponse.json();
-                    payload.clientIp = ipData.ip;
-                } catch (ipError) {
-                    console.warn('Could not fetch client IP for website visit notification:', ipError);
-                }
-
-                try {
-                    const response = await retryFetch(notificationUrl, {
-                        method: 'POST', // Changed back to POST for serverless function
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                    });
-
-                    try {
-                        const result = await response.json(); 
-                        console.log('Vercel Function Response (JSON) for website visit:', result);
-                    } catch (jsonError) {
-                        const rawText = await response.text();
-                        console.error('Vercel Function Response (JSON Parse Error - Raw Text) for website visit:', rawText, jsonError);
-                        console.warn('HINT: Your Vercel function should return JSON. If not, check its implementation.');
-                    }
-                } catch (error) {
-                    console.error('Error sending website visit notification (Network/CORS):', error);
-                    console.warn('HINT: Ensure your Vercel serverless function is deployed and correctly configured with CORS headers.');
-                }
-            }
-
-            // Call the website visit notification function when the page loads
-            sendWebsiteVisitNotification();
         });
 
         var tag = document.createElement('script');
