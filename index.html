@@ -567,7 +567,7 @@
             color: #374151; /* Dark text */
         }
         .modal-button.explore:hover {
-            background-color: #fbbf24; /* Lighter gold */
+            background-color: #fbbf24;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
@@ -848,7 +848,7 @@
                     <p class="text-gray-800 mt-4 max-w-2xl mx-auto">We've partnered with **TrendQash Agencies**, a trusted digital income hub, to bring you a platform designed for the modern student. It's more than just earning; it's about empowering your future.</p>
                     <!-- Image for About Section: Student Group Image with clickable button -->
                     <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl overflow-hidden group aspect-video">
-                        <img id="studentGroupImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcEfANzr9UksjfN78jM7nY5kE08G-zsZmwYA&s" alt="Group of SEKU students collaborating" class="absolute inset-0 w-full h-full object-cover">
+                        <img id="studentGroupImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcEfANzr9UksjfN78jM7nY5kE08G-zsZmwYA&s" class="absolute inset-0 w-full h-full object-cover" alt="Group of SEKU students collaborating">
                         
                         <!-- Video Player (initially hidden) -->
                         <div id="significantEarningsVideoContainer" class="absolute inset-0 hidden">
@@ -957,7 +957,7 @@
                     <!-- Image for Earning Opportunities: Phone Earning Image with clickable button -->
                     <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-xl h-auto overflow-hidden group">
                         <!-- FIX: Replaced broken image URL with a reliable placeholder -->
-                        <img src="https://placehold.co/600x400/d1d5db/4b5563?text=Earn+Daily+on+Phone" alt="Person earning money on phone" class="w-full h-full object-cover">
+                        <img src="https://placehold.co/600x400/d1d5db/4b5563?text=Earn+Daily+on+Phone" class="w-full h-full object-cover" alt="Person earning money on phone">
                         
                         <!-- Opaque button over "trendqash.co.ke" -->
                         <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer"
@@ -999,7 +999,7 @@
                     <h3 class="text-3xl md:text-4xl font-bold section-title">Getting Started is Easy</h3>
                     <!-- Certificate Image with opaque clickable button -->
                     <div class="relative mx-auto mt-8 rounded-lg shadow-lg w-full max-w-md h-auto overflow-hidden group">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjvv9kuGlyvRsqDS0h6w5SafDZFpFjBxyxEA&s" alt="Certificate of Registration" class="mx-auto rounded-lg shadow-lg w-full h-full object-cover">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjvv9kuGlyvRsqDS0h6w5SafDZFpFjBxyxEA&s" class="mx-auto rounded-lg shadow-lg w-full h-full object-cover" alt="Certificate of Registration">
                         
                         <!-- Opaque button over "trendqashagencies.site" -->
                         <a href="https://www.trendqash.com/user/register.php?ref=Tasha456" target="_blank" rel="noopener noreferrer"
@@ -1172,7 +1172,7 @@
     <div id="poster-modal-overlay" class="modal-overlay">
         <div class="modal-content">
             <button id="modal-close-btn" class="modal-close-btn">&times;</button>
-            <img src="https://placehold.co/150x150/facc15/374151?text=Opportunity" alt="Opportunity Icon" class="modal-image">
+            <img src="https://placehold.co/150x150/facc15/374151?text=Opportunity" class="modal-image" alt="Opportunity Icon">
             <h3 class="modal-title">Don't Miss Out!</h3>
             <p class="modal-description">Unlock your financial freedom today. Seize this incredible opportunity to earn while you learn!</p>
             <div class="modal-buttons">
@@ -1186,7 +1186,7 @@
     <div id="register-modal-overlay" class="modal-overlay">
         <div class="register-modal-content">
             <button id="register-modal-close-btn" class="modal-close-btn">&times;</button>
-            <img src="https://placehold.co/180x180/a78bfa/FFFFFF?text=Start+Earning" alt="Happy black-beauty coloured official university lady using a laptop" class="register-modal-image">
+            <img src="https://placehold.co/180x180/a78bfa/FFFFFF?text=Start+Earning" class="register-modal-image" alt="Happy black-beauty coloured official university lady using a laptop">
             <h3 class="register-modal-title">Ready to Earn?</h3>
             <p class="register-modal-description">Don't wait! Register your account now and start your journey towards financial independence.</p>
             <div class="modal-buttons">
@@ -1202,7 +1202,7 @@
     <div id="brighton-modal-overlay" class="modal-overlay">
         <div class="brighton-modal-content">
             <button id="brighton-modal-close-btn" class="modal-close-btn">&times;</button>
-            <img src="https://placehold.co/160x160/60a5fa/FFFFFF?text=Web+Designer" alt="Professional web designer working on laptop" class="brighton-modal-image">
+            <img src="https://placehold.co/160x160/60a5fa/FFFFFF?text=Web+Designer" class="brighton-modal-image" alt="Professional web designer working on laptop">
             <h3 class="brighton-modal-title">Designed by Brighton Wanjala</h3>
             <p class="brighton-modal-description">This website was crafted by Brighton Wanjala, a highly skilled Web Designer and Developer. Interested in a stunning website for yourself?</p>
             <div class="modal-buttons">
@@ -1225,9 +1225,20 @@
         import ReactDOM from "https://esm.sh/react-dom@18.2.0/client";
 
         // Global Firebase variables (provided by Canvas environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // Your web app's Firebase configuration (replace with your values from Firebase Console)
+        const firebaseConfig = {
+          apiKey: "AIzaSyA-3vVopzEos1fG0wTrHLeVWK1lCXE9UCc",
+          authDomain: "seku-hub.firebaseapp.com",
+          projectId: "seku-hub",
+          storageBucket: "seku-hub.firebasestorage.app",
+          messagingSenderId: "80556939281",
+          appId: "1:80556939281:web:4b38c77c59e7822806b9b0",
+          measurementId: "G-H4BHL8NHTG"
+        };
+        // The __app_id and __initial_auth_token are specific to the Canvas environment
+        // For Vercel, if you need these, you'd manage them differently (e.g., Vercel env vars for appId, or remove auth if not needed)
+        const appId = "seku-hub"; // Hardcode or fetch from a Vercel env var if needed for Firestore path
+        const initialAuthToken = null; // Not applicable for direct Vercel deployment unless you implement custom auth
 
         let app;
         let db;
@@ -1251,6 +1262,7 @@
          * @returns {Promise<Response>} The fetch response.
          */
         async function retryFetch(url, options, retries = 3, delay = 1000) {
+            console.log(`Attempting fetch to ${url} (Retries left: ${retries}, Delay: ${delay / 1000}s)`);
             try {
                 const response = await fetch(url, options);
                 if (!response.ok) {
@@ -1276,15 +1288,10 @@
             }
         }
 
-        // Function to send login notifications to Apps Script
+        // Function to send login notifications to Vercel Serverless Function
         async function sendLoginNotification(user) {
-            // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL for email notifications
-            const notificationUrl = 'https://script.google.com/macros/s/AKfycbzVtUteI8KkdKyS5MrdKmhw1LJkyf8zBjqDe6TaeC5WkRG4cJ968gQWHnxXxW6oIuMB/exec'; 
-
-            if (!notificationUrl || notificationUrl === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
-                console.warn("Login notification URL is not configured. Please update 'notificationUrl' in sendLoginNotification function.");
-                return;
-            }
+            // This URL points to your Vercel Serverless Function
+            const notificationUrl = '/api/email-notification'; 
 
             let loginType = 'continuous_login';
             if (!loggedInUsers.has(user.uid)) {
@@ -1295,39 +1302,37 @@
 
             const payload = {
                 event: 'user_login',
-                loginType: loginType, // 'first_time_login' or 'continuous_login'
+                loginType: loginType,
                 userId: user.uid,
-                email: user.email || 'N/A', // Firebase user might not always have an email
+                email: user.email || 'N/A',
                 timestamp: new Date().toISOString(),
                 page: window.location.href,
                 userAgent: navigator.userAgent,
-                clientIp: 'Unknown' // Client IP is best fetched server-side for accuracy
+                clientIp: 'Unknown'
             };
 
-            console.log(`Sending ${loginType} notification for user: ${user.uid}`);
+            console.log(`Sending ${loginType} notification for user: ${user.uid} to ${notificationUrl}`);
 
             try {
                 const response = await retryFetch(notificationUrl, {
-                    method: 'POST',
+                    method: 'POST', // Changed back to POST for serverless function
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    mode: 'cors',
                     body: JSON.stringify(payload),
                 });
 
-                // If retryFetch completed without throwing an error, response is ok
                 try {
                     const result = await response.json(); 
                     console.log('Login Notification Response:', result);
                 } catch (jsonError) {
                     const rawText = await response.text();
                     console.error('Login Notification Response (JSON Parse Error - Raw Text):', rawText, jsonError);
-                    console.warn('HINT: Apps Script Web Apps often return plain text or HTML on success, not always JSON. If the raw text looks like a success message, this might not be an error.');
+                    console.warn('HINT: Your Vercel function should return JSON. If not, check its implementation.');
                 }
             } catch (error) {
                 console.error('Error sending login notification (Network/CORS):', error);
-                console.warn('HINT: This often means a persistent network issue, an inaccessible Apps Script Web App URL, or incorrect deployment permissions (e.g., "Who has access" should be "Anyone").');
+                console.warn('HINT: Ensure your Vercel serverless function is deployed and correctly configured with CORS headers.');
             }
         }
 
@@ -1339,11 +1344,10 @@
                 auth = getAuth(app);
 
                 // Sign in with custom token if available, otherwise anonymously
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                // For direct Vercel deployment, __initial_auth_token is not available.
+                // We'll use signInAnonymously if no specific auth method is implemented.
+                await signInAnonymously(auth);
+                
 
                 // Listen for auth state changes to set userId and send login notifications
                 onAuthStateChanged(auth, (user) => {
@@ -1382,6 +1386,7 @@
                         return;
                     }
                     try {
+                        // Use the hardcoded appId for the Firestore path
                         const opportunitiesCol = collection(db, `artifacts/${appId}/public/data/opportunities`);
                         const opportunitySnapshot = await getDocs(opportunitiesCol);
                         const opportunitiesList = opportunitySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1747,9 +1752,10 @@
                 hideModal(brightonModalOverlay, restartZCycle, 20000);
             });
 
-            // Original sendWebsiteVisitNotification function (now only sending website visit)
+            // Function to send website visit notification to Vercel Serverless Function
             async function sendWebsiteVisitNotification() {
-                const notificationUrl = 'https://script.google.com/macros/s/AKfycbzVtUteI8KkdKyS5MrdKmhw1LJkyf8zBjqDe6TaeC5WkRG4cJ968gQWHnxXxW6oIuMB/exec'; 
+                // This URL points to your Vercel Serverless Function
+                const notificationUrl = '/api/email-notification'; 
                 
                 console.log('Attempting to send website visit notification to:', notificationUrl);
 
@@ -1773,24 +1779,22 @@
 
                 try {
                     const response = await retryFetch(notificationUrl, {
-                        method: 'POST', 
+                        method: 'POST', // Changed back to POST for serverless function
                         headers: { 'Content-Type': 'application/json' },
-                        mode: 'cors',
                         body: JSON.stringify(payload),
                     });
 
-                    // If retryFetch completed without throwing an error, response is ok
                     try {
                         const result = await response.json(); 
-                        console.log('Apps Script Response (JSON) for website visit:', result);
+                        console.log('Vercel Function Response (JSON) for website visit:', result);
                     } catch (jsonError) {
                         const rawText = await response.text();
-                        console.error('Apps Script Response (JSON Parse Error - Raw Text) for website visit:', rawText, jsonError);
-                        console.warn('HINT: Apps Script Web Apps often return plain text or HTML on success, not always JSON. If the raw text looks like a success message, this might not be an error.');
+                        console.error('Vercel Function Response (JSON Parse Error - Raw Text) for website visit:', rawText, jsonError);
+                        console.warn('HINT: Your Vercel function should return JSON. If not, check its implementation.');
                     }
                 } catch (error) {
                     console.error('Error sending website visit notification (Network/CORS):', error);
-                    console.warn('HINT: This often means a persistent network issue, an inaccessible Apps Script Web App URL, or incorrect deployment permissions (e.g., "Who has access" should be "Anyone").');
+                    console.warn('HINT: Ensure your Vercel serverless function is deployed and correctly configured with CORS headers.');
                 }
             }
 
