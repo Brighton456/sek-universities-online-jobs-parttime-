@@ -1,0 +1,13 @@
+    {
+      "name": "seku-opportunities-hub-vercel-backend",
+      "version": "1.0.0",
+      "description": "Backend for SEKU Opportunities Hub on Vercel",
+      "main": "api/email-notification.js",
+      "scripts": {
+        "start": "vercel dev"
+      },
+      "dependencies": {
+        "nodemailer": "^6.9.14"
+      }
+    }
+    
